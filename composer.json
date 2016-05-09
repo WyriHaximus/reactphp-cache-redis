@@ -16,7 +16,8 @@
         "phpunit/phpunit": "^5.2.3",
         "squizlabs/php_codesniffer": "^2.6",
         "vectorface/dunit": "~2.0",
-        "phake/phake": "^2.3"
+        "phake/phake": "^2.3",
+        "clue/block-react": "^1.1"
     },
     "autoload": {
         "psr-4": {
