@@ -5,6 +5,7 @@ namespace WyriHaximus\React\Cache;
 use Clue\React\Redis\Client;
 use React\Cache\CacheInterface;
 use React\Promise\PromiseInterface;
+use function React\Promise\reject;
 
 class Redis implements CacheInterface
 {
@@ -35,7 +36,12 @@ class Redis implements CacheInterface
      */
     public function get($key)
     {
-        return $this->client->get($this->prefix . $key);
+        return $this->client->exists($this->prefix . $key)->then(function ($result) use ($key) {
+            if ($result == false) {
+                return reject();
+            }
+            return $this->client->get($this->prefix . $key);
+        });
     }
 
     /**
