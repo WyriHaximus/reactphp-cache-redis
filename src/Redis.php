@@ -5,6 +5,7 @@ namespace WyriHaximus\React\Cache;
 use Clue\React\Redis\Client;
 use React\Cache\CacheInterface;
 use React\Promise\PromiseInterface;
+use function React\Promise\reject;
 
 class Redis implements CacheInterface
 {
