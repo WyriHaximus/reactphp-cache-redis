@@ -35,7 +35,12 @@ class Redis implements CacheInterface
      */
     public function get($key)
     {
-        return $this->client->get($this->prefix . $key);
+        return $this->client->exists($this->prefix . $key)->then(function ($result) use ($key) {
+            if ($result == false) {
+                return reject();
+            }
+            return $this->client->get($this->prefix . $key);
+        });
     }
 
     /**
