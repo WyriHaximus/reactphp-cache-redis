@@ -47,17 +47,19 @@ class Redis implements CacheInterface
     /**
      * @param string $key
      * @param mixed $value
+     * @return PromiseInterface
      */
     public function set($key, $value)
     {
-        $this->client->set($this->prefix . $key, $value);
+        return $this->client->set($this->prefix . $key, $value);
     }
 
     /**
      * @param string $key
+     * @return PromiseInterface
      */
     public function remove($key)
     {
-        $this->client->del($this->prefix . $key);
+        return $this->client->del($this->prefix . $key);
     }
 }
