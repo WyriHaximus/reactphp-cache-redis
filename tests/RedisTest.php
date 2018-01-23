@@ -60,7 +60,9 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $prefix = 'root:';
         $key = 'key';
         $value = 'value';
-        (new Redis($this->client, $prefix))->set($key, $value);
+        Phake::when($this->client)->set($prefix . $key, $value)->thenReturn(new FulfilledPromise("OK"));
+        $promise = (new Redis($this->client, $prefix))->set($key, $value);
+        $this->assertInstanceOf(PromiseInterface::class, $promise);
         Phake::verify($this->client)->set($prefix . $key, $value);
     }
 
@@ -80,7 +82,9 @@ class RedisTest extends \PHPUnit_Framework_TestCase
     {
         $prefix = 'root:';
         $key = 'key';
-        (new Redis($this->client, $prefix))->remove($key);
+        Phake::when($this->client)->del($prefix . $key)->thenReturn(new FulfilledPromise(1));
+        $promise = (new Redis($this->client, $prefix))->remove($key);
+        $this->assertInstanceOf(PromiseInterface::class, $promise);
         Phake::verify($this->client)->del($prefix . $key);
     }
 }
