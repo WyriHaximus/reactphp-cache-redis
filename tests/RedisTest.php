@@ -8,6 +8,7 @@ use React\EventLoop\Factory;
 use React\Promise\FulfilledPromise;
 use React\Promise\PromiseInterface;
 use React\Promise\RejectedPromise;
+use function React\Promise\resolve;
 use WyriHaximus\React\Cache\Redis;
 use function Clue\React\Block\await;
 
@@ -61,6 +62,18 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $value = 'value';
         (new Redis($this->client, $prefix))->set($key, $value);
         Phake::verify($this->client)->set($prefix . $key, $value);
+    }
+
+    public function testSetTtl()
+    {
+        $prefix = 'root:';
+        $key = 'key';
+        $value = 'value';
+        $ttl = 123;
+        Phake::when($this->client)->set($prefix . $key, $value)->thenReturn(new FulfilledPromise());
+        (new Redis($this->client, $prefix, $ttl))->set($key, $value);
+        Phake::verify($this->client)->set($prefix . $key, $value);
+        Phake::verify($this->client)->expire($prefix . $key, $ttl);
     }
 
     public function testRemove()

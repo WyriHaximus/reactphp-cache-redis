@@ -20,14 +20,20 @@ class Redis implements CacheInterface
     protected $prefix;
 
     /**
+     * @var int
+     */
+    protected $ttl;
+
+    /**
      * Redis constructor.
      * @param Client $client
      * @param string $prefix
      */
-    public function __construct(Client $client, $prefix = 'reach:cache:')
+    public function __construct(Client $client, $prefix = 'reach:cache:', $ttl = 0)
     {
         $this->client = $client;
         $this->prefix = $prefix;
+        $this->ttl = (int)$ttl;
     }
 
     /**
@@ -50,7 +56,15 @@ class Redis implements CacheInterface
      */
     public function set($key, $value)
     {
-        $this->client->set($this->prefix . $key, $value);
+        if ($this->ttl === 0) {
+            $this->client->set($this->prefix . $key, $value);
+
+            return;
+        }
+
+        $this->client->set($this->prefix . $key, $value)->then(function () use ($key) {
+            $this->client->expire($this->prefix . $key, $this->ttl);
+        });
     }
 
     /**
