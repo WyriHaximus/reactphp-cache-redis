@@ -58,13 +58,11 @@ class Redis implements CacheInterface
     public function set($key, $value)
     {
         if ($this->ttl === 0) {
-            $this->client->set($this->prefix . $key, $value);
-
-            return;
+            return $this->client->set($this->prefix . $key, $value);
         }
 
-        $this->client->set($this->prefix . $key, $value)->then(function () use ($key) {
-            $this->client->expire($this->prefix . $key, $this->ttl);
+        return $this->client->set($this->prefix . $key, $value)->then(function () use ($key) {
+            return $this->client->expire($this->prefix . $key, $this->ttl);
         });
     }
 
