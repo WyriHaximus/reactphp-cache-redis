@@ -1,5 +1,6 @@
 {
     "name": "wyrihaximus/react-cache-redis",
+    "description": "Redis cache for react/cache",
     "license": "MIT",
     "authors": [
         {
