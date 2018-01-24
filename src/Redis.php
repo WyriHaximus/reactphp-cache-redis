@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace WyriHaximus\React\Cache;
 
@@ -7,7 +7,7 @@ use React\Cache\CacheInterface;
 use React\Promise\PromiseInterface;
 use function React\Promise\reject;
 
-class Redis implements CacheInterface
+final class Redis implements CacheInterface
 {
     /**
      * @var Client
@@ -29,15 +29,15 @@ class Redis implements CacheInterface
      * @param Client $client
      * @param string $prefix
      */
-    public function __construct(Client $client, $prefix = 'reach:cache:', $ttl = 0)
+    public function __construct(Client $client, string $prefix = 'reach:cache:', int $ttl = 0)
     {
         $this->client = $client;
         $this->prefix = $prefix;
-        $this->ttl = (int)$ttl;
+        $this->ttl = $ttl;
     }
 
     /**
-     * @param string $key
+     * @param  string           $key
      * @return PromiseInterface
      */
     public function get($key)
@@ -46,13 +46,14 @@ class Redis implements CacheInterface
             if ($result == false) {
                 return reject();
             }
+
             return $this->client->get($this->prefix . $key);
         });
     }
 
     /**
-     * @param string $key
-     * @param mixed $value
+     * @param  string           $key
+     * @param  mixed            $value
      * @return PromiseInterface
      */
     public function set($key, $value)
@@ -67,7 +68,7 @@ class Redis implements CacheInterface
     }
 
     /**
-     * @param string $key
+     * @param  string           $key
      * @return PromiseInterface
      */
     public function remove($key)

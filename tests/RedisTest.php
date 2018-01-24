@@ -1,18 +1,18 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace WyriHaximus\Tests\React\Cache;
 
-use Phake;
+use ApiClients\Tools\TestUtilities\TestCase;
 use Clue\React\Redis\Client;
+use Phake;
 use React\EventLoop\Factory;
 use React\Promise\FulfilledPromise;
 use React\Promise\PromiseInterface;
 use React\Promise\RejectedPromise;
-use function React\Promise\resolve;
 use WyriHaximus\React\Cache\Redis;
 use function Clue\React\Block\await;
 
-class RedisTest extends \PHPUnit_Framework_TestCase
+final class RedisTest extends TestCase
 {
     /**
      * @var Client
@@ -60,7 +60,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $prefix = 'root:';
         $key = 'key';
         $value = 'value';
-        Phake::when($this->client)->set($prefix . $key, $value)->thenReturn(new FulfilledPromise("OK"));
+        Phake::when($this->client)->set($prefix . $key, $value)->thenReturn(new FulfilledPromise('OK'));
         $promise = (new Redis($this->client, $prefix))->set($key, $value);
         $this->assertInstanceOf(PromiseInterface::class, $promise);
         Phake::verify($this->client)->set($prefix . $key, $value);
