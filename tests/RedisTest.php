@@ -50,7 +50,7 @@ final class RedisTest extends TestCase
         Phake::when($this->client)->get($prefix . $key)->thenReturn(new RejectedPromise());
         $promise = (new Redis($this->client, $prefix))->get($key);
         $this->assertInstanceOf(PromiseInterface::class, $promise);
-        $this->assertInstanceOf(RejectedPromise::class, $promise);
+        $this->assertInstanceOf(FulfilledPromise::class, $promise);
         Phake::verify($this->client)->exists($prefix . $key);
         Phake::verify($this->client, Phake::never())->get($prefix . $key);
     }
@@ -66,7 +66,7 @@ final class RedisTest extends TestCase
         Phake::verify($this->client)->set($prefix . $key, $value);
     }
 
-    public function testSetTtl()
+    public function testSetGlobalTtl()
     {
         $prefix = 'root:';
         $key = 'key';
@@ -78,12 +78,24 @@ final class RedisTest extends TestCase
         Phake::verify($this->client)->expire($prefix . $key, $ttl);
     }
 
-    public function testRemove()
+    public function testSetTtl()
+    {
+        $prefix = 'root:';
+        $key = 'key';
+        $value = 'value';
+        $ttl = 123;
+        Phake::when($this->client)->set($prefix . $key, $value)->thenReturn(new FulfilledPromise());
+        (new Redis($this->client, $prefix))->set($key, $value, $ttl);
+        Phake::verify($this->client)->set($prefix . $key, $value);
+        Phake::verify($this->client)->expire($prefix . $key, $ttl);
+    }
+
+    public function testDelete()
     {
         $prefix = 'root:';
         $key = 'key';
         Phake::when($this->client)->del($prefix . $key)->thenReturn(new FulfilledPromise(1));
-        $promise = (new Redis($this->client, $prefix))->remove($key);
+        $promise = (new Redis($this->client, $prefix))->delete($key);
         $this->assertInstanceOf(PromiseInterface::class, $promise);
         Phake::verify($this->client)->del($prefix . $key);
     }
