@@ -3,100 +3,87 @@
 namespace WyriHaximus\Tests\React\Cache;
 
 use ApiClients\Tools\TestUtilities\TestCase;
-use Clue\React\Redis\Client;
-use Phake;
 use React\EventLoop\Factory;
 use React\Promise\FulfilledPromise;
 use React\Promise\PromiseInterface;
 use React\Promise\RejectedPromise;
 use WyriHaximus\React\Cache\Redis;
-use function Clue\React\Block\await;
 
+/**
+ * @internal
+ */
 final class RedisTest extends TestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
+    private $client;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
-        $this->client = Phake::mock(Client::class);
+        $this->client = $this->prophesize(ClientStub::class);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $prefix = 'root:';
         $key = 'key';
         $value = 'value';
-        Phake::when($this->client)->exists($prefix . $key)->thenReturn(new FulfilledPromise(1));
-        Phake::when($this->client)->get($prefix . $key)->thenReturn(new FulfilledPromise($value));
-        $promise = (new Redis($this->client, $prefix))->get($key);
+        $this->client->exists($prefix . $key)->shouldBeCalled()->willReturn(new FulfilledPromise(1));
+        $this->client->get($prefix . $key)->shouldBeCalled()->willReturn(new FulfilledPromise($value));
+        $promise = (new Redis($this->client->reveal(), $prefix))->get($key);
         $this->assertInstanceOf(PromiseInterface::class, $promise);
-        $result = await($promise, Factory::create());
+        $result = $this->await($promise, Factory::create());
         $this->assertSame($value, $result);
-        Phake::inOrder(
-            Phake::verify($this->client)->exists($prefix . $key),
-            Phake::verify($this->client)->get($prefix . $key)
-        );
     }
 
-    public function testGetNonExistant()
+    public function testGetNonExistant(): void
     {
         $prefix = 'root:';
         $key = 'key';
-        Phake::when($this->client)->exists($prefix . $key)->thenReturn(new FulfilledPromise(0));
-        Phake::when($this->client)->get($prefix . $key)->thenReturn(new RejectedPromise());
-        $promise = (new Redis($this->client, $prefix))->get($key);
+        $this->client->exists($prefix . $key)->shouldBeCalled()->willReturn(new FulfilledPromise(0));
+        $this->client->get($prefix . $key)->shouldNotBeCalled()->willReturn(new RejectedPromise());
+        $promise = (new Redis($this->client->reveal(), $prefix))->get($key);
         $this->assertInstanceOf(PromiseInterface::class, $promise);
         $this->assertInstanceOf(FulfilledPromise::class, $promise);
-        Phake::verify($this->client)->exists($prefix . $key);
-        Phake::verify($this->client, Phake::never())->get($prefix . $key);
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $prefix = 'root:';
         $key = 'key';
         $value = 'value';
-        Phake::when($this->client)->set($prefix . $key, $value)->thenReturn(new FulfilledPromise('OK'));
-        $promise = (new Redis($this->client, $prefix))->set($key, $value);
+        $this->client->set($prefix . $key, $value)->shouldBeCalled()->willReturn(new FulfilledPromise('OK'));
+        $promise = (new Redis($this->client->reveal(), $prefix))->set($key, $value);
         $this->assertInstanceOf(PromiseInterface::class, $promise);
-        Phake::verify($this->client)->set($prefix . $key, $value);
     }
 
-    public function testSetGlobalTtl()
+    public function testSetGlobalTtl(): void
     {
         $prefix = 'root:';
         $key = 'key';
         $value = 'value';
         $ttl = 123;
-        Phake::when($this->client)->set($prefix . $key, $value)->thenReturn(new FulfilledPromise());
-        (new Redis($this->client, $prefix, $ttl))->set($key, $value);
-        Phake::verify($this->client)->set($prefix . $key, $value);
-        Phake::verify($this->client)->expire($prefix . $key, $ttl);
+        $this->client->set($prefix . $key, $value)->shouldBeCalled()->willReturn(new FulfilledPromise());
+        $this->client->expire($prefix . $key, $ttl)->shouldBeCalled()->willReturn(new FulfilledPromise());
+        (new Redis($this->client->reveal(), $prefix, $ttl))->set($key, $value);
     }
 
-    public function testSetTtl()
+    public function testSetTtl(): void
     {
         $prefix = 'root:';
         $key = 'key';
         $value = 'value';
         $ttl = 123;
-        Phake::when($this->client)->set($prefix . $key, $value)->thenReturn(new FulfilledPromise());
-        (new Redis($this->client, $prefix))->set($key, $value, $ttl);
-        Phake::verify($this->client)->set($prefix . $key, $value);
-        Phake::verify($this->client)->expire($prefix . $key, $ttl);
+        $this->client->set($prefix . $key, $value)->shouldBeCalled()->willReturn(new FulfilledPromise());
+        $this->client->expire($prefix . $key, $ttl)->shouldBeCalled()->willReturn(new FulfilledPromise());
+        (new Redis($this->client->reveal(), $prefix))->set($key, $value, $ttl);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $prefix = 'root:';
         $key = 'key';
-        Phake::when($this->client)->del($prefix . $key)->thenReturn(new FulfilledPromise(1));
-        $promise = (new Redis($this->client, $prefix))->delete($key);
+        $this->client->del($prefix . $key)->shouldBeCalled()->willReturn(new FulfilledPromise(1));
+        $promise = (new Redis($this->client->reveal(), $prefix))->delete($key);
         $this->assertInstanceOf(PromiseInterface::class, $promise);
-        Phake::verify($this->client)->del($prefix . $key);
     }
 }

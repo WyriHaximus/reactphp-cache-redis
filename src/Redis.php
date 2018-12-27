@@ -12,17 +12,17 @@ final class Redis implements CacheInterface
     /**
      * @var Client
      */
-    protected $client;
+    private $client;
 
     /**
      * @var string
      */
-    protected $prefix;
+    private $prefix;
 
     /**
      * @var int
      */
-    protected $ttl;
+    private $ttl;
 
     /**
      * Redis constructor.
