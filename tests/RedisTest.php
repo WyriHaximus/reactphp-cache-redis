@@ -3,13 +3,11 @@
 namespace WyriHaximus\Tests\React\Cache;
 
 use ApiClients\Tools\TestUtilities\TestCase;
-use Clue\React\Redis\Client;
 use React\EventLoop\Factory;
 use React\Promise\FulfilledPromise;
 use React\Promise\PromiseInterface;
 use React\Promise\RejectedPromise;
 use WyriHaximus\React\Cache\Redis;
-use function Clue\React\Block\await;
 
 /**
  * @internal

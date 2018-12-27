@@ -9,17 +9,17 @@ use function React\Promise\resolve;
 
 class ClientStub extends EventEmitter implements Client
 {
-    public function __call($name, $args)
+    public function __call($name, $args): void
     {
         // TODO: Implement __call() method.
     }
 
-    public function end()
+    public function end(): void
     {
         // TODO: Implement end() method.
     }
 
-    public function close()
+    public function close(): void
     {
         // TODO: Implement close() method.
     }
