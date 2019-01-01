@@ -14,7 +14,7 @@
         "react/cache": "^0.5.0"
     },
     "require-dev": {
-        "api-clients/test-utilities": "^5.2"
+        "api-clients/test-utilities": "^5.4"
     },
     "autoload": {
         "psr-4": {
