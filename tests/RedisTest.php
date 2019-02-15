@@ -62,8 +62,7 @@ final class RedisTest extends TestCase
         $key = 'key';
         $value = 'value';
         $ttl = 123;
-        $this->client->set($prefix . $key, $value)->shouldBeCalled()->willReturn(new FulfilledPromise());
-        $this->client->expire($prefix . $key, $ttl)->shouldBeCalled()->willReturn(new FulfilledPromise());
+        $this->client->psetex($prefix . $key, $ttl * 1000, $value)->shouldBeCalled()->willReturn(new FulfilledPromise());
         (new Redis($this->client->reveal(), $prefix, $ttl))->set($key, $value);
     }
 
@@ -73,8 +72,7 @@ final class RedisTest extends TestCase
         $key = 'key';
         $value = 'value';
         $ttl = 123;
-        $this->client->set($prefix . $key, $value)->shouldBeCalled()->willReturn(new FulfilledPromise());
-        $this->client->expire($prefix . $key, $ttl)->shouldBeCalled()->willReturn(new FulfilledPromise());
+        $this->client->psetex($prefix . $key, $ttl * 1000, $value)->shouldBeCalled()->willReturn(new FulfilledPromise());
         (new Redis($this->client->reveal(), $prefix))->set($key, $value, $ttl);
     }
 

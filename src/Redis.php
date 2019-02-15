@@ -68,9 +68,11 @@ final class Redis implements CacheInterface
             });
         }
 
-        return $this->client->set($this->prefix . $key, $value)->then(function () use ($key, $ttl) {
-            return $this->client->expire($this->prefix . $key, $this->ttl > 0 ? $this->ttl : $ttl);
-        })->then(function () {
+        return $this->client->psetex(
+            $this->prefix . $key,
+            ($this->ttl > 0 ? $this->ttl : $ttl) * 1000,
+            $value
+        )->then(function () {
             return resolve(true);
         }, function () {
             return resolve(false);
