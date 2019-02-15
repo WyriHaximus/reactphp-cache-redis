@@ -48,4 +48,9 @@ class ClientStub extends EventEmitter implements Client
     {
         return resolve();
     }
+
+    public function isBusy()
+    {
+        return true;
+    }
 }
