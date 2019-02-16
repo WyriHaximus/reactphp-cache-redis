@@ -39,7 +39,7 @@ class ClientStub extends EventEmitter implements Client
         return resolve();
     }
 
-    public function expire(): PromiseInterface
+    public function psetex(): PromiseInterface
     {
         return resolve();
     }
@@ -47,5 +47,10 @@ class ClientStub extends EventEmitter implements Client
     public function del(): PromiseInterface
     {
         return resolve();
+    }
+
+    public function isBusy()
+    {
+        return true;
     }
 }
