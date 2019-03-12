@@ -52,29 +52,30 @@
         },
         {
             "name": "clue/redis-react",
-            "version": "v2.2.0",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/clue/php-redis-react.git",
-                "reference": "e2332a09f74d6cb5fb89acdeae49a0b6ef4407ab"
+                "url": "https://github.com/clue/reactphp-redis.git",
+                "reference": "426e9dfd71e7ffa20de080a725589ff9b42762ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/php-redis-react/zipball/e2332a09f74d6cb5fb89acdeae49a0b6ef4407ab",
-                "reference": "e2332a09f74d6cb5fb89acdeae49a0b6ef4407ab",
+                "url": "https://api.github.com/repos/clue/reactphp-redis/zipball/426e9dfd71e7ffa20de080a725589ff9b42762ca",
+                "reference": "426e9dfd71e7ffa20de080a725589ff9b42762ca",
                 "shasum": ""
             },
             "require": {
                 "clue/redis-protocol": "0.3.*",
                 "evenement/evenement": "^3.0 || ^2.0 || ^1.0",
                 "php": ">=5.3",
-                "react/event-loop": "^1.0 || ^0.5 || ^0.4 || ^0.3",
+                "react/event-loop": "^1.0 || ^0.5",
                 "react/promise": "^2.0 || ^1.1",
-                "react/socket": "^1.0 || ^0.8.3"
+                "react/promise-timer": "^1.5",
+                "react/socket": "^1.1"
             },
             "require-dev": {
                 "clue/block-react": "^1.1",
-                "phpunit/phpunit": "^5.0 || ^4.8"
+                "phpunit/phpunit": "^7.0 || ^6.0 || ^5.0 || ^4.8.35"
             },
             "type": "library",
             "autoload": {
@@ -92,15 +93,16 @@
                     "email": "christian@lueck.tv"
                 }
             ],
-            "description": "Async Redis client implementation, built on top of ReactPHP",
-            "homepage": "https://github.com/clue/php-redis-react",
+            "description": "Async Redis client implementation, built on top of ReactPHP.",
+            "homepage": "https://github.com/clue/reactphp-redis",
             "keywords": [
                 "async",
                 "client",
+                "database",
                 "reactphp",
                 "redis"
             ],
-            "time": "2018-01-24T11:19:31+00:00"
+            "time": "2019-03-11T10:20:19+00:00"
         },
         {
             "name": "evenement/evenement",
@@ -232,27 +234,28 @@
         },
         {
             "name": "react/event-loop",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/event-loop.git",
-                "reference": "0266aff7aa7b0613b1f38a723e14a0ebc55cfca3"
+                "reference": "a0ecac955c67b57c40fe4a1b88a7cca1b58c982d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/0266aff7aa7b0613b1f38a723e14a0ebc55cfca3",
-                "reference": "0266aff7aa7b0613b1f38a723e14a0ebc55cfca3",
+                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/a0ecac955c67b57c40fe4a1b88a7cca1b58c982d",
+                "reference": "a0ecac955c67b57c40fe4a1b88a7cca1b58c982d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.8.35 || ^5.7 || ^6.4"
+                "phpunit/phpunit": "^7.0 || ^6.4 || ^5.7 || ^4.8.35"
             },
             "suggest": {
                 "ext-event": "~1.0 for ExtEventLoop",
-                "ext-pcntl": "For signal handling support when using the StreamSelectLoop"
+                "ext-pcntl": "For signal handling support when using the StreamSelectLoop",
+                "ext-uv": "* for ExtUvLoop"
             },
             "type": "library",
             "autoload": {
@@ -269,7 +272,7 @@
                 "asynchronous",
                 "event-loop"
             ],
-            "time": "2018-07-11T14:37:46+00:00"
+            "time": "2019-02-07T16:19:49+00:00"
         },
         {
             "name": "react/promise",
@@ -2536,7 +2539,7 @@
                     "homepage": "http://blog.astrumfutura.com"
                 },
                 {
-                    "name": "Théo Fidry",
+                    "name": "Théo FIDRY",
                     "email": "theo.fidry@gmail.com"
                 }
             ],
