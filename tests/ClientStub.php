@@ -49,6 +49,11 @@ class ClientStub extends EventEmitter implements Client
         return resolve();
     }
 
+    public function keys(): PromiseInterface
+    {
+        return resolve();
+    }
+
     public function isBusy()
     {
         return true;

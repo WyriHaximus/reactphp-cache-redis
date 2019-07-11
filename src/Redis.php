@@ -4,6 +4,7 @@ namespace WyriHaximus\React\Cache;
 
 use Clue\React\Redis\Client;
 use React\Cache\CacheInterface;
+use function React\Promise\all;
 use React\Promise\PromiseInterface;
 use function React\Promise\resolve;
 
@@ -90,5 +91,50 @@ final class Redis implements CacheInterface
         }, function () {
             return resolve(false);
         });
+    }
+
+    public function getMultiple(array $keys, $default = null)
+    {
+        $promises = [];
+        foreach ($keys as $key) {
+            $promises[$key] = $this->get($key, $default);
+        }
+
+        return all($promises);
+    }
+
+    public function setMultiple(array $values, $ttl = null)
+    {
+        $promises = [];
+        foreach ($values as $key => $value) {
+            $promises[$key] = $this->set($key, $value, $ttl);
+        }
+
+        return all($promises);
+    }
+
+    public function deleteMultiple(array $keys)
+    {
+        foreach ($keys as $index => $key) {
+            $keys[$index] = $this->prefix . $key;
+        }
+
+        return $this->client->del(...$keys)->then(function () {
+            return resolve(true);
+        }, function () {
+            return resolve(false);
+        });
+    }
+
+    public function clear()
+    {
+        return $this->client->keys($this->prefix . '*')->then(function (array $keys) {
+            return $this->deleteMultiple($keys);
+        });
+    }
+
+    public function has($key)
+    {
+        return $this->client->exists($this->prefix . $key);
     }
 }
