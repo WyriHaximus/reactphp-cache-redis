@@ -1,6 +1,6 @@
 # Redis cache implementation for react/cache
 
-[![Build Status](https://travis-ci.org/WyriHaximus/reactphp-cache-redis.svg?branch=master)](https://travis-ci.org/WyriHaximus/reactphp-cache-redis)
+[![Build Status](https://travis-ci.com/WyriHaximus/reactphp-cache-redis.svg?branch=master)](https://travis-ci.com/WyriHaximus/reactphp-cache-redis)
 [![Latest Stable Version](https://poser.pugx.org/WyriHaximus/react-cache-redis/v/stable.png)](https://packagist.org/packages/WyriHaximus/react-cache-redis)
 [![Total Downloads](https://poser.pugx.org/WyriHaximus/react-cache-redis/downloads.png)](https://packagist.org/packages/WyriHaximus/react-cache-redis)
 [![Code Coverage](https://scrutinizer-ci.com/g/WyriHaximus/reactphp-cache-redis/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/WyriHaximus/reactphp-cache-redis/?branch=master)
