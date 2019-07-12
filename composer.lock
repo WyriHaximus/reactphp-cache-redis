@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5cd85f02489e1cd997fd8a2c3a45b7ee",
+    "content-hash": "f9d08f57238dce82d2227dc89cc9f301",
     "packages": [
         {
             "name": "clue/redis-protocol",
@@ -603,84 +603,6 @@
                 "stream"
             ],
             "time": "2019-06-03T21:45:17+00:00"
-        },
-        {
-            "name": "api-clients/cs-fixer-config",
-            "version": "1.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-api-clients/cs-fixer-config.git",
-                "reference": "91df959c3d8ab7e1797d03e1fc47e2f48377cf6a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-api-clients/cs-fixer-config/zipball/91df959c3d8ab7e1797d03e1fc47e2f48377cf6a",
-                "reference": "91df959c3d8ab7e1797d03e1fc47e2f48377cf6a",
-                "shasum": ""
-            },
-            "require": {
-                "friendsofphp/php-cs-fixer": "^2.5",
-                "php": "^7.2"
-            },
-            "require-dev": {
-                "api-clients/test-utilities": "^5.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "ApiClients\\Tools\\CsFixerConfig\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Cees-Jan Kiewiet",
-                    "email": "ceesjank@gmail.com"
-                }
-            ],
-            "description": "friendsofphp/php-cs-fixer config",
-            "time": "2018-12-24T13:32:35+00:00"
-        },
-        {
-            "name": "api-clients/test-utilities",
-            "version": "5.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-api-clients/test-utilities.git",
-                "reference": "fd15e5037078e2e92af390b4e0ef866db857aa8d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-api-clients/test-utilities/zipball/fd15e5037078e2e92af390b4e0ef866db857aa8d",
-                "reference": "fd15e5037078e2e92af390b4e0ef866db857aa8d",
-                "shasum": ""
-            },
-            "require": {
-                "api-clients/cs-fixer-config": "^1.1.1",
-                "php": "^7.2",
-                "wyrihaximus/async-test-utilities": "^1.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "ApiClients\\Tools\\TestUtilities\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Cees-Jan Kiewiet",
-                    "email": "ceesjank@gmail.com"
-                }
-            ],
-            "description": "Test utilities for api-clients packages",
-            "time": "2019-03-16T23:24:37+00:00"
         },
         {
             "name": "clue/block-react",
