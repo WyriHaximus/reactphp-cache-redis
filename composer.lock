@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f1dd9714367a55e3d9b319b726e4dbe8",
+    "content-hash": "5cd85f02489e1cd997fd8a2c3a45b7ee",
     "packages": [
         {
             "name": "clue/redis-protocol",
@@ -149,16 +149,16 @@
         },
         {
             "name": "react/cache",
-            "version": "v0.6.0",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/cache.git",
-                "reference": "a42d149e15b8312918327d5be2ba757cd2f23ff9"
+                "reference": "aa10d63a1b40a36a486bdf527f28bac607ee6466"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/cache/zipball/a42d149e15b8312918327d5be2ba757cd2f23ff9",
-                "reference": "a42d149e15b8312918327d5be2ba757cd2f23ff9",
+                "url": "https://api.github.com/repos/reactphp/cache/zipball/aa10d63a1b40a36a486bdf527f28bac607ee6466",
+                "reference": "aa10d63a1b40a36a486bdf527f28bac607ee6466",
                 "shasum": ""
             },
             "require": {
@@ -185,7 +185,7 @@
                 "promise",
                 "reactphp"
             ],
-            "time": "2019-07-04T14:45:59+00:00"
+            "time": "2019-07-11T13:45:28+00:00"
         },
         {
             "name": "react/dns",
