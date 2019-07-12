@@ -11,10 +11,10 @@
     "require": {
         "php": "^7.2",
         "clue/redis-react": "^2.0 || ^1.0 || ^0.5.1",
-        "react/cache": "^0.6.0"
+        "react/cache": "^0.6.0 || ^1.0.0"
     },
     "require-dev": {
-        "api-clients/test-utilities": "^5.4"
+        "wyrihaximus/async-test-utilities": "^1.1"
     },
     "autoload": {
         "psr-4": {
