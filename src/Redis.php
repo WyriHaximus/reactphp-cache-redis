@@ -129,6 +129,7 @@ final class Redis implements CacheInterface
     public function clear()
     {
         return $this->client->keys($this->prefix . '*')->then(function (array $keys) {
+            $keys = preg_replace('|^' . preg_quote($this->prefix) . '|', '', $keys);
             return $this->deleteMultiple($keys);
         });
     }
