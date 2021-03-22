@@ -1,0 +1,7 @@
+parameters:
+	ergebnis:
+		classesAllowedToBeExtended:
+			- Exception
+
+includes:
+	- ../../vendor/wyrihaximus/async-test-utilities/rules.neon

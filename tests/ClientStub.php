@@ -1,15 +1,26 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace WyriHaximus\Tests\React\Cache;
 
 use Clue\React\Redis\Client;
-use Evenement\EventEmitter;
+use Evenement\EventEmitterTrait;
 use React\Promise\PromiseInterface;
+
 use function React\Promise\resolve;
 
-class ClientStub extends EventEmitter implements Client
+/**
+ * @phpstan-ignore-next-line
+ */
+class ClientStub implements Client
 {
-    public function __call($name, $args): void
+    use EventEmitterTrait;
+
+    /**
+     * @phpstan-ignore-next-line
+     */
+    public function __call($name, $args): void //phpcs:disabled
     {
         // TODO: Implement __call() method.
     }
@@ -54,7 +65,10 @@ class ClientStub extends EventEmitter implements Client
         return resolve();
     }
 
-    public function isBusy()
+    /**
+     * @phpstan-ignore-next-line
+     */
+    public function isBusy() //phpcs:disabled
     {
         return true;
     }
