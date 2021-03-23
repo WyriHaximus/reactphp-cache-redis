@@ -1,98 +1,105 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace WyriHaximus\React\Cache;
 
 use Clue\React\Redis\Client;
 use React\Cache\CacheInterface;
-use function React\Promise\all;
 use React\Promise\PromiseInterface;
+
+use function preg_quote;
+use function React\Promise\all;
 use function React\Promise\resolve;
+use function Safe\preg_replace;
 
 final class Redis implements CacheInterface
 {
-    /**
-     * @var Client
-     */
-    private $client;
+    private Client $client;
+
+    private string $prefix;
+
+    private int $ttl;
 
     /**
-     * @var string
-     */
-    private $prefix;
-
-    /**
-     * @var int
-     */
-    private $ttl;
-
-    /**
-     * Redis constructor.
-     * @param Client $client
-     * @param string $prefix
+     * @phpstan-ignore-next-line
      */
     public function __construct(Client $client, string $prefix = 'reach:cache:', int $ttl = 0)
     {
         $this->client = $client;
         $this->prefix = $prefix;
-        $this->ttl = $ttl;
+        $this->ttl    = $ttl;
     }
 
     /**
-     * @param  string           $key
-     * @param  null|mixed       $default
-     * @return PromiseInterface
+     * @inheritDoc
+     * @phpstan-ignore-next-line
      */
-    public function get($key, $default = null)
+    public function get($key, $default = null): PromiseInterface
     {
-        return $this->client->exists($this->prefix . $key)->then(function ($result) use ($key) {
-            if ($result == false) {
+        /**
+         * @psalm-suppress MissingClosureParamType
+         * @psalm-suppress TooManyTemplateParams
+         */
+        return $this->has($key)->then(function ($result) use ($key): PromiseInterface {
+            if ($result === false) {
                 return resolve(null);
             }
 
+            /**
+             * @phpstan-ignore-next-line
+             */
             return $this->client->get($this->prefix . $key);
         });
     }
 
     /**
-     * @param  string           $key
-     * @param  mixed            $value
-     * @param  ?float           $ttl
-     * @return PromiseInterface
+     * @inheritDoc
+     * @phpstan-ignore-next-line
      */
-    public function set($key, $value, $ttl = null)
+    public function set($key, $value, $ttl = null): PromiseInterface
     {
         if ($this->ttl === 0 && $ttl === null) {
-            return $this->client->set($this->prefix . $key, $value)->then(function () {
-                return resolve(true);
-            }, function () {
-                return resolve(false);
-            });
+            /**
+             * @phpstan-ignore-next-line
+             */
+            return $this->client->set($this->prefix . $key, $value)->then(
+                static fn (): PromiseInterface => resolve(true),
+                static fn (): PromiseInterface => resolve(false),
+            );
         }
 
+        /**
+         * @phpstan-ignore-next-line
+         */
         return $this->client->psetex(
             $this->prefix . $key,
-            ($this->ttl > 0 ? $this->ttl : $ttl) * 1000,
+            (float) ($this->ttl > 0 ? $this->ttl : $ttl) * 1000,
             $value
-        )->then(function () {
-            return resolve(true);
-        }, function () {
-            return resolve(false);
-        });
+        )->then(
+            static fn (): PromiseInterface => resolve(true),
+            static fn (): PromiseInterface => resolve(false),
+        );
     }
 
     /**
-     * @param  string           $key
-     * @return PromiseInterface
+     * @inheritDoc
      */
-    public function delete($key)
+    public function delete($key): PromiseInterface
     {
-        return $this->client->del($this->prefix . $key)->then(function () {
-            return resolve(true);
-        }, function () {
-            return resolve(false);
-        });
+        /**
+         * @phpstan-ignore-next-line
+         */
+        return $this->client->del($this->prefix . $key)->then(
+            static fn (): PromiseInterface => resolve(true),
+            static fn (): PromiseInterface => resolve(false),
+        );
     }
 
+    /**
+     * @inheritDoc
+     * @phpstan-ignore-next-line
+     */
     public function getMultiple(array $keys, $default = null)
     {
         $promises = [];
@@ -103,6 +110,10 @@ final class Redis implements CacheInterface
         return all($promises);
     }
 
+    /**
+     * @inheritDoc
+     * @phpstan-ignore-next-line
+     */
     public function setMultiple(array $values, $ttl = null)
     {
         $promises = [];
@@ -113,29 +124,49 @@ final class Redis implements CacheInterface
         return all($promises);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function deleteMultiple(array $keys)
     {
         foreach ($keys as $index => $key) {
             $keys[$index] = $this->prefix . $key;
         }
 
-        return $this->client->del(...$keys)->then(function () {
-            return resolve(true);
-        }, function () {
-            return resolve(false);
-        });
+        /**
+         * @phpstan-ignore-next-line
+         * @psalm-suppress InvalidArgument
+         */
+        return $this->client->del(...$keys)->then(
+            static fn (): PromiseInterface => resolve(true),
+            static fn (): PromiseInterface => resolve(false),
+        );
     }
 
+    /**
+     * @inheritDoc
+     */
     public function clear()
     {
-        return $this->client->keys($this->prefix . '*')->then(function (array $keys) {
+        /**
+         * @phpstan-ignore-next-line
+         * @psalm-suppress TooManyTemplateParams
+         */
+        return $this->client->keys($this->prefix . '*')->then(function (array $keys): PromiseInterface {
             $keys = preg_replace('|^' . preg_quote($this->prefix) . '|', '', $keys);
+
             return $this->deleteMultiple($keys);
         });
     }
 
+    /**
+     * @inheritDoc
+     */
     public function has($key)
     {
+        /**
+         * @phpstan-ignore-next-line
+         */
         return $this->client->exists($this->prefix . $key);
     }
 }
