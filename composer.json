@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "php": "^7.4",
+        "php": "^8 || ^7.4",
         "clue/redis-react": "^2.3",
         "evenement/evenement": "^3.0",
         "react/cache": "^1.1.1",
