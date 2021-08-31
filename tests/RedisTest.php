@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WyriHaximus\Tests\React\Cache;
 
 use Exception;
-use React\EventLoop\Factory;
 use WyriHaximus\AsyncTestUtilities\AsyncTestCase;
 use WyriHaximus\React\Cache\Redis;
 
@@ -27,7 +26,7 @@ final class RedisTest extends AsyncTestCase
         $client->get($prefix . $key)->shouldBeCalled()->willReturn(resolve($value));
         $promise = (new Redis($client->reveal(), $prefix))->get($key);
 
-        $result = $this->await($promise, Factory::create());
+        $result = $this->await($promise);
         self::assertSame($value, $result);
     }
 
