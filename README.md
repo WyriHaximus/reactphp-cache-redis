@@ -23,14 +23,10 @@ composer require wyrihaximus/react-cache-redis
 <?php
 
 use Clue\React\Redis\Client;
-use Clue\React\Redis\Factory as RedisFactory;
-use React\EventLoop\Factory as LoopFactory;
+use Clue\React\Redis\Factory;
 use WyriHaximus\React\Cache\Redis;
 
-$loop = LoopFactory::create();
-$factory = new RedisFactory($loop);
-
-$factory->createClient()->then(function (Client $client) {
+(new Factory())->createClient()->then(function (Client $client) {
     $cache = new Redis($client, 'react:cache:your:key:prefix:');
 });
 ```
@@ -39,7 +35,7 @@ $factory->createClient()->then(function (Client $client) {
 
 The MIT License (MIT)
 
-Copyright (c) 2018 Cees-Jan Kiewiet
+Copyright (c) 2021 Cees-Jan Kiewiet
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
