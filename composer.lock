@@ -4488,16 +4488,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.96",
+            "version": "0.12.97",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "a98bdc51318f20fcae8c953d266f81a70254917f"
+                "reference": "a8867e63a00e606589faf8d3613164f20722c4ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a98bdc51318f20fcae8c953d266f81a70254917f",
-                "reference": "a98bdc51318f20fcae8c953d266f81a70254917f",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a8867e63a00e606589faf8d3613164f20722c4ee",
+                "reference": "a8867e63a00e606589faf8d3613164f20722c4ee",
                 "shasum": ""
             },
             "require": {
@@ -4528,7 +4528,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.96"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.97"
             },
             "funding": [
                 {
@@ -4548,7 +4548,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-21T11:55:13+00:00"
+            "time": "2021-09-01T10:51:52+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
@@ -8751,16 +8751,16 @@
         },
         {
             "name": "wyrihaximus/async-test-utilities",
-            "version": "4.0.2",
+            "version": "4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WyriHaximus/php-async-test-utilities.git",
-                "reference": "5f44970e811cdcd4ac7ee1627f2325b1a2404e21"
+                "reference": "161c8a5f238cdc244442738dc9f873738124b80c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WyriHaximus/php-async-test-utilities/zipball/5f44970e811cdcd4ac7ee1627f2325b1a2404e21",
-                "reference": "5f44970e811cdcd4ac7ee1627f2325b1a2404e21",
+                "url": "https://api.github.com/repos/WyriHaximus/php-async-test-utilities/zipball/161c8a5f238cdc244442738dc9f873738124b80c",
+                "reference": "161c8a5f238cdc244442738dc9f873738124b80c",
                 "shasum": ""
             },
             "require": {
@@ -8793,7 +8793,7 @@
             "description": "Test utilities for api-clients packages",
             "support": {
                 "issues": "https://github.com/WyriHaximus/php-async-test-utilities/issues",
-                "source": "https://github.com/WyriHaximus/php-async-test-utilities/tree/4.0.2"
+                "source": "https://github.com/WyriHaximus/php-async-test-utilities/tree/4.0.3"
             },
             "funding": [
                 {
@@ -8801,7 +8801,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-08-30T05:24:40+00:00"
+            "time": "2021-09-01T07:48:21+00:00"
         },
         {
             "name": "wyrihaximus/coding-standard",
