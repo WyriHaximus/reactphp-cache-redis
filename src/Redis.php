@@ -24,7 +24,7 @@ final class Redis implements CacheInterface
     /**
      * @phpstan-ignore-next-line
      */
-    public function __construct(Client $client, string $prefix = 'reach:cache:', int $ttl = 0)
+    public function __construct(Client $client, string $prefix = 'react:cache:', int $ttl = 0)
     {
         $this->client = $client;
         $this->prefix = $prefix;
