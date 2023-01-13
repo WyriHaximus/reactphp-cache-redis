@@ -15,6 +15,9 @@ use function Safe\preg_replace;
 
 final class Redis implements CacheInterface
 {
+    private const SUCCESSFUL = true;
+    private const FAILURE    = false;
+
     private Client $client;
 
     private string $prefix;
@@ -64,8 +67,8 @@ final class Redis implements CacheInterface
              * @phpstan-ignore-next-line
              */
             return $this->client->set($this->prefix . $key, $value)->then(
-                static fn (): PromiseInterface => resolve(true),
-                static fn (): PromiseInterface => resolve(false),
+                static fn (): PromiseInterface => resolve(self::SUCCESSFUL),
+                static fn (): PromiseInterface => resolve(self::FAILURE),
             );
         }
 
@@ -77,8 +80,8 @@ final class Redis implements CacheInterface
             (float) ($this->ttl > 0 ? $this->ttl : $ttl) * 1000,
             $value
         )->then(
-            static fn (): PromiseInterface => resolve(true),
-            static fn (): PromiseInterface => resolve(false),
+            static fn (): PromiseInterface => resolve(self::SUCCESSFUL),
+            static fn (): PromiseInterface => resolve(self::FAILURE),
         );
     }
 
@@ -91,8 +94,8 @@ final class Redis implements CacheInterface
          * @phpstan-ignore-next-line
          */
         return $this->client->del($this->prefix . $key)->then(
-            static fn (): PromiseInterface => resolve(true),
-            static fn (): PromiseInterface => resolve(false),
+            static fn (): PromiseInterface => resolve(self::SUCCESSFUL),
+            static fn (): PromiseInterface => resolve(self::FAILURE),
         );
     }
 
@@ -138,8 +141,8 @@ final class Redis implements CacheInterface
          * @psalm-suppress InvalidArgument
          */
         return $this->client->del(...$keys)->then(
-            static fn (): PromiseInterface => resolve(true),
-            static fn (): PromiseInterface => resolve(false),
+            static fn (): PromiseInterface => resolve(self::SUCCESSFUL),
+            static fn (): PromiseInterface => resolve(self::FAILURE),
         );
     }
 
@@ -156,7 +159,10 @@ final class Redis implements CacheInterface
             $keys = preg_replace('|^' . preg_quote($this->prefix) . '|', '', $keys);
 
             return $this->deleteMultiple($keys);
-        });
+        })->then(
+            static fn (): PromiseInterface => resolve(self::SUCCESSFUL),
+            static fn (): PromiseInterface => resolve(self::FAILURE),
+        );
     }
 
     /**

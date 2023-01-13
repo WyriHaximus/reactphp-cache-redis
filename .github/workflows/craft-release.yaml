@@ -6,28 +6,8 @@ on:
     types:
       - closed
 jobs:
-  wait-for-status-checks:
-    name: Wait for status checks
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - run: sleep 13
-      - name: 'Wait for status checks'
-        id: waitforstatuschecks
-        uses: "WyriHaximus/github-action-wait-for-status@master"
-        with:
-          ignoreActions: "Wait for status checks"
-          checkInterval: 5
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-      - id: generate-version-strategy
-        if: steps.waitforstatuschecks.outputs.status != 'success'
-        name: Fail
-        run: exit 1
   generate-changelog:
     name: Generate Changelog
-    needs:
-      - wait-for-status-checks
     runs-on: ubuntu-latest
     outputs:
       changelog: ${{ steps.changelog.outputs.changelog }}
@@ -39,6 +19,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           milestone: ${{ env.MILESTONE }}
+          labels: "Bug 🐞,Dependabot 🤖,Feature 🏗,Enhancement ✨"
       - name: Show changelog
         run: echo "${CHANGELOG}"
         env:
@@ -49,7 +30,7 @@ jobs:
       - generate-changelog
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         env:
           CHANGELOG: ${{ needs.generate-changelog.outputs.changelog }}
       - run: |
@@ -64,13 +45,11 @@ jobs:
         env:
           MILESTONE_DESCRIPTION: ${{ github.event.milestone.description }}
           CHANGELOG: ${{ needs.generate-changelog.outputs.changelog }}
-      - name: Create Reference Release with Changelog
-        uses: fleskesvor/create-release@feature/support-target-commitish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release with Changelog
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ env.MILESTONE }}
-          release_name: ${{ env.MILESTONE }}
+          tag: ${{ env.MILESTONE }}
           body: ${{ steps.releasemessage.outputs.release_message }}
           draft: false
           prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}

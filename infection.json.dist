@@ -11,8 +11,11 @@
         "json": "./var/infection.json",
         "perMutator": "./var/infection-per-mutator.md"
     },
+    "minMsi": 100,
+    "minCoveredMsi": 100,
+    "ignoreMsiWithNoMutations": true,
     "mutators": {
-        "@default": false
+        "@default": true
     },
     "phpUnit": {
         "configDir": "./etc/qa/"
