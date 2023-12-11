@@ -8,12 +8,11 @@ use Exception;
 use WyriHaximus\AsyncTestUtilities\AsyncTestCase;
 use WyriHaximus\React\Cache\Redis;
 
+use function React\Async\await;
 use function React\Promise\reject;
 use function React\Promise\resolve;
 
-/**
- * @internal
- */
+/** @internal */
 final class RedisTest extends AsyncTestCase
 {
     public function testGet(): void
@@ -26,8 +25,7 @@ final class RedisTest extends AsyncTestCase
         $client->get($prefix . $key)->shouldBeCalled()->willReturn(resolve($value));
         $promise = (new Redis($client->reveal(), $prefix))->get($key);
 
-        $result = $this->await($promise);
-        self::assertSame($value, $result);
+        self::assertSame($value, await($promise)); /** @phpstan-ignore-line */
     }
 
     public function testGetNonExistant(): void
@@ -37,7 +35,7 @@ final class RedisTest extends AsyncTestCase
         $key    = 'key';
         $client->exists($prefix . $key)->shouldBeCalled()->willReturn(resolve(0));
         $client->get($prefix . $key)->shouldBeCalled()->willReturn(resolve(null));
-        self::assertNull($this->await((new Redis($client->reveal(), $prefix))->get($key)));
+        self::assertNull(await((new Redis($client->reveal(), $prefix))->get($key))); /** @phpstan-ignore-line */
     }
 
     public function testSet(): void
@@ -58,7 +56,7 @@ final class RedisTest extends AsyncTestCase
         $value  = 'value';
         $ttl    = 123;
         $client->psetex($prefix . $key, $ttl * 1000, $value)->shouldBeCalled()->willReturn(resolve(null));
-        self::assertTrue($this->await((new Redis($client->reveal(), $prefix, $ttl))->set($key, $value)));
+        self::assertTrue(await((new Redis($client->reveal(), $prefix, $ttl))->set($key, $value))); /** @phpstan-ignore-line */
     }
 
     public function testSetTtl(): void
@@ -69,7 +67,7 @@ final class RedisTest extends AsyncTestCase
         $value  = 'value';
         $ttl    = 123;
         $client->psetex($prefix . $key, $ttl * 1000, $value)->shouldBeCalled()->willReturn(resolve(null));
-        self::assertTrue($this->await((new Redis($client->reveal(), $prefix))->set($key, $value, $ttl)));
+        self::assertTrue(await((new Redis($client->reveal(), $prefix))->set($key, $value, $ttl))); /** @phpstan-ignore-line */
     }
 
     public function testSetTtlException(): void
@@ -80,7 +78,7 @@ final class RedisTest extends AsyncTestCase
         $value  = 'value';
         $ttl    = 123;
         $client->psetex($prefix . $key, $ttl * 1000, $value)->shouldBeCalled()->willReturn(reject(new Exception('fail!')));
-        self::assertFalse($this->await((new Redis($client->reveal(), $prefix))->set($key, $value, $ttl)));
+        self::assertFalse(await((new Redis($client->reveal(), $prefix))->set($key, $value, $ttl))); /** @phpstan-ignore-line */
     }
 
     public function testSetException(): void
@@ -90,7 +88,7 @@ final class RedisTest extends AsyncTestCase
         $key    = 'key';
         $value  = 'value';
         $client->set($prefix . $key, $value)->shouldBeCalled()->willReturn(reject(new Exception('fail!')));
-        self::assertFalse($this->await((new Redis($client->reveal(), $prefix))->set($key, $value)));
+        self::assertFalse(await((new Redis($client->reveal(), $prefix))->set($key, $value))); /** @phpstan-ignore-line */
     }
 
     public function testDelete(): void
@@ -156,7 +154,7 @@ final class RedisTest extends AsyncTestCase
         $value  = 'value';
         $ttl    = 123;
         $client->psetex($prefix . $key, $ttl * 1000, $value)->shouldBeCalled()->willReturn(resolve(true));
-        self::assertSame([$key => true], $this->await((new Redis($client->reveal(), $prefix))->setMultiple([$key => $value], $ttl)));
+        self::assertSame([$key => true], await((new Redis($client->reveal(), $prefix))->setMultiple([$key => $value], $ttl))); /** @phpstan-ignore-line */
     }
 
     public function testGetMultiple(): void
@@ -167,6 +165,6 @@ final class RedisTest extends AsyncTestCase
         $value  = 'value';
         $client->exists($prefix . $key)->shouldBeCalled()->willReturn(resolve(true));
         $client->get($prefix . $key)->shouldBeCalled()->willReturn(resolve($value));
-        self::assertSame([$key => $value], $this->await((new Redis($client->reveal(), $prefix))->getMultiple([$key])));
+        self::assertSame([$key => $value], await((new Redis($client->reveal(), $prefix))->getMultiple([$key]))); /** @phpstan-ignore-line */
     }
 }

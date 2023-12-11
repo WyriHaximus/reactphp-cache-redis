@@ -15,20 +15,9 @@ use function Safe\preg_replace;
 
 final class Redis implements CacheInterface
 {
-    private Client $client;
-
-    private string $prefix;
-
-    private int $ttl;
-
-    /**
-     * @phpstan-ignore-next-line
-     */
-    public function __construct(Client $client, string $prefix = 'react:cache:', int $ttl = 0)
+    /** @phpstan-ignore-next-line */
+    public function __construct(private Client $client, private string $prefix = 'react:cache:', private int $ttl = 0)
     {
-        $this->client = $client;
-        $this->prefix = $prefix;
-        $this->ttl    = $ttl;
     }
 
     /**
@@ -46,9 +35,7 @@ final class Redis implements CacheInterface
                 return resolve(null);
             }
 
-            /**
-             * @phpstan-ignore-next-line
-             */
+            /** @phpstan-ignore-next-line */
             return $this->client->get($this->prefix . $key);
         });
     }
@@ -60,36 +47,28 @@ final class Redis implements CacheInterface
     public function set($key, $value, $ttl = null): PromiseInterface
     {
         if ($this->ttl === 0 && $ttl === null) {
-            /**
-             * @phpstan-ignore-next-line
-             */
-            return $this->client->set($this->prefix . $key, $value)->then(
+            /** @phpstan-ignore-next-line */
+            return $this->client->set($this->prefix . $key, (string) $value)->then(
                 static fn (): PromiseInterface => resolve(true),
                 static fn (): PromiseInterface => resolve(false),
             );
         }
 
-        /**
-         * @phpstan-ignore-next-line
-         */
+        /** @phpstan-ignore-next-line */
         return $this->client->psetex(
             $this->prefix . $key,
-            (float) ($this->ttl > 0 ? $this->ttl : $ttl) * 1000,
-            $value
+            (string) ((float) ($this->ttl > 0 ? $this->ttl : $ttl) * 1000),
+            (string) $value, /** @phpstan-ignore-line */
         )->then(
             static fn (): PromiseInterface => resolve(true),
             static fn (): PromiseInterface => resolve(false),
         );
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function delete($key): PromiseInterface
     {
-        /**
-         * @phpstan-ignore-next-line
-         */
+        /** @phpstan-ignore-next-line */
         return $this->client->del($this->prefix . $key)->then(
             static fn (): PromiseInterface => resolve(true),
             static fn (): PromiseInterface => resolve(false),
@@ -117,16 +96,15 @@ final class Redis implements CacheInterface
     public function setMultiple(array $values, $ttl = null)
     {
         $promises = [];
+        /** @psalm-suppress MixedAssignment */
         foreach ($values as $key => $value) {
-            $promises[$key] = $this->set($key, $value, $ttl);
+            $promises[$key] = $this->set((string) $key, $value, $ttl);
         }
 
         return all($promises);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function deleteMultiple(array $keys)
     {
         foreach ($keys as $index => $key) {
@@ -143,9 +121,7 @@ final class Redis implements CacheInterface
         );
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function clear()
     {
         /**
@@ -153,20 +129,17 @@ final class Redis implements CacheInterface
          * @psalm-suppress TooManyTemplateParams
          */
         return $this->client->keys($this->prefix . '*')->then(function (array $keys): PromiseInterface {
+            /** @var array<string> $keys */
             $keys = preg_replace('|^' . preg_quote($this->prefix) . '|', '', $keys);
 
             return $this->deleteMultiple($keys);
         });
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function has($key)
     {
-        /**
-         * @phpstan-ignore-next-line
-         */
+        /** @phpstan-ignore-next-line */
         return $this->client->exists($this->prefix . $key);
     }
 }
