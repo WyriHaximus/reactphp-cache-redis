@@ -57,7 +57,7 @@ final class RedisTest extends AsyncTestCase
         $key    = 'key';
         $value  = 'value';
         $ttl    = 123;
-        $client->psetex($prefix . $key, $ttl * 1000, $value)->shouldBeCalled()->willReturn(resolve());
+        $client->psetex($prefix . $key, $ttl * 1000, $value)->shouldBeCalled()->willReturn(resolve(null));
         self::assertTrue($this->await((new Redis($client->reveal(), $prefix, $ttl))->set($key, $value)));
     }
 
@@ -68,7 +68,7 @@ final class RedisTest extends AsyncTestCase
         $key    = 'key';
         $value  = 'value';
         $ttl    = 123;
-        $client->psetex($prefix . $key, $ttl * 1000, $value)->shouldBeCalled()->willReturn(resolve());
+        $client->psetex($prefix . $key, $ttl * 1000, $value)->shouldBeCalled()->willReturn(resolve(null));
         self::assertTrue($this->await((new Redis($client->reveal(), $prefix))->set($key, $value, $ttl)));
     }
 
