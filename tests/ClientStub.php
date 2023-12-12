@@ -10,16 +10,12 @@ use React\Promise\PromiseInterface;
 
 use function React\Promise\resolve;
 
-/**
- * @phpstan-ignore-next-line
- */
+/** @phpstan-ignore-next-line */
 class ClientStub implements Client
 {
     use EventEmitterTrait;
 
-    /**
-     * @phpstan-ignore-next-line
-     */
+    /** @phpstan-ignore-next-line */
     public function __call($name, $args): void //phpcs:disabled
     {
         // TODO: Implement __call() method.
