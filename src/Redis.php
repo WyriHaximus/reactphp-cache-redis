@@ -29,6 +29,7 @@ final class Redis implements CacheInterface
         /**
          * @psalm-suppress MissingClosureParamType
          * @psalm-suppress TooManyTemplateParams
+         * @psalm-suppress InvalidArgument
          */
         return $this->has($key)->then(function ($result) use ($key): PromiseInterface {
             if ($result === false) {
@@ -101,7 +102,21 @@ final class Redis implements CacheInterface
             $promises[$key] = $this->set((string) $key, $value, $ttl);
         }
 
-        return all($promises);
+        /**
+         * @param PromiseInterface<bool> $bools
+         *
+         * @psalm-suppress InvalidArgument
+         */
+        return all($promises)->then(static function (array $bools): bool {
+            /** @psalm-suppress MixedAssignment */
+            foreach ($bools as $bool) {
+                if (! $bool) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
     }
 
     /** @inheritDoc */
@@ -111,11 +126,8 @@ final class Redis implements CacheInterface
             $keys[$index] = $this->prefix . $key;
         }
 
-        /**
-         * @phpstan-ignore-next-line
-         * @psalm-suppress InvalidArgument
-         */
-        return $this->client->del(...$keys)->then(
+        /** @psalm-suppress InvalidArgument */
+        return $this->client->del(...$keys)->then( /** @phpstan-ignore-line */
             static fn (): PromiseInterface => resolve(true),
             static fn (): PromiseInterface => resolve(false),
         );
@@ -125,21 +137,29 @@ final class Redis implements CacheInterface
     public function clear()
     {
         /**
-         * @phpstan-ignore-next-line
          * @psalm-suppress TooManyTemplateParams
+         * @psalm-suppress InvalidArgument
          */
-        return $this->client->keys($this->prefix . '*')->then(function (array $keys): PromiseInterface {
+        return $this->client->keys($this->prefix . '*')->then( /** @phpstan-ignore-line */
+            function (array $keys): PromiseInterface {
             /** @var array<string> $keys */
-            $keys = preg_replace('|^' . preg_quote($this->prefix) . '|', '', $keys);
+                $keys = preg_replace('|^' . preg_quote($this->prefix) . '|', '', $keys);
 
-            return $this->deleteMultiple($keys);
-        });
+                return $this->deleteMultiple($keys);
+            },
+        );
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     * @psalm-suppress MixedReturnTypeCoercion
+     */
     public function has($key)
     {
-        /** @phpstan-ignore-next-line */
+        /**
+         * @psalm-suppress MixedReturnTypeCoercion
+         * @phpstan-ignore-next-line
+         */
         return $this->client->exists($this->prefix . $key);
     }
 }

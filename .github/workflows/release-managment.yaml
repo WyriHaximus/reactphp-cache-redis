@@ -7,6 +7,9 @@ on:
       - unlabeled
       - synchronize
       - reopened
+      - milestoned
+      - demilestoned
+      - ready_for_review
   milestone:
     types:
       - closed
@@ -16,7 +19,7 @@ permissions:
   pull-requests: write
 jobs:
   release-managment:
-    name: Create Release
+    name: Release Management
     uses: WyriHaximus/github-workflows/.github/workflows/package-release-managment.yaml@main
     with:
       milestone: ${{ github.event.milestone.title }}

@@ -31,34 +31,52 @@ class ClientStub implements Client
         // TODO: Implement close() method.
     }
 
+    /**
+     * @return PromiseInterface<bool>
+     */
     public function exists(): PromiseInterface
     {
-        return resolve();
+        return resolve(true);
     }
 
+    /**
+     * @return PromiseInterface<mixed>
+     */
     public function get(): PromiseInterface
     {
-        return resolve();
+        return resolve(null);
     }
 
+    /**
+     * @return PromiseInterface<null>
+     */
     public function set(): PromiseInterface
     {
-        return resolve();
+        return resolve(null);
     }
 
+    /**
+     * @return PromiseInterface<null>
+     */
     public function psetex(): PromiseInterface
     {
-        return resolve();
+        return resolve(null);
     }
 
+    /**
+     * @return PromiseInterface<null>
+     */
     public function del(): PromiseInterface
     {
-        return resolve();
+        return resolve(null);
     }
 
+    /**
+     * @return PromiseInterface<array<string>>
+     */
     public function keys(): PromiseInterface
     {
-        return resolve();
+        return resolve(['string']);
     }
 
     /**
