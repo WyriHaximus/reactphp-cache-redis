@@ -1,13 +1,12 @@
 # Redis cache implementation for react/cache
 
-[![Build Status](https://travis-ci.com/WyriHaximus/reactphp-cache-redis.svg?branch=master)](https://travis-ci.com/WyriHaximus/reactphp-cache-redis)
-[![Latest Stable Version](https://poser.pugx.org/WyriHaximus/react-cache-redis/v/stable.png)](https://packagist.org/packages/WyriHaximus/react-cache-redis)
-[![Total Downloads](https://poser.pugx.org/WyriHaximus/react-cache-redis/downloads.png)](https://packagist.org/packages/WyriHaximus/react-cache-redis)
-[![Code Coverage](https://scrutinizer-ci.com/g/WyriHaximus/reactphp-cache-redis/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/WyriHaximus/reactphp-cache-redis/?branch=master)
-[![License](https://poser.pugx.org/WyriHaximus/react-cache-redis/license.png)](https://packagist.org/packages/WyriHaximus/react-cache-redis)
-[![PHP 7 ready](http://php7ready.timesplinter.ch/WyriHaximus/reactphp-cache-redis/badge.svg)](https://travis-ci.org/WyriHaximus/reactphp-cache-redis)
+![Continuous Integration](https://github.com/wyrihaximus/reactphp-cache-redis/workflows/Continuous%20Integration/badge.svg)
+[![Latest Stable Version](https://poser.pugx.org/wyrihaximus/react-cache-redis/v/stable.png)](https://packagist.org/packages/wyrihaximus/react-cache-redis)
+[![Total Downloads](https://poser.pugx.org/wyrihaximus/react-cache-redis/downloads.png)](https://packagist.org/packages/wyrihaximus/react-cache-redis/stats)
+[![Type Coverage](https://shepherd.dev/github/WyriHaximus/reactphp-cache-redis/coverage.svg)](https://shepherd.dev/github/WyriHaximus/reactphp-cache-redis)
+[![License](https://poser.pugx.org/wyrihaximus/react-cache-redis/license.png)](https://packagist.org/packages/wyrihaximus/react-cache-redis)
 
-Use redis as a cache, implementing the [react/cache interface](https://github.com/reactphp/cache)
+Use Redis as a cache, implementing the [react/cache interface](https://github.com/reactphp/cache)
 
 # Installation
 
@@ -35,7 +34,7 @@ use WyriHaximus\React\Cache\Redis;
 
 The MIT License (MIT)
 
-Copyright (c) 2021 Cees-Jan Kiewiet
+Copyright (c) 2024 Cees-Jan Kiewiet
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
