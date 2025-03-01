@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WyriHaximus\Tests\React\Cache;
 
 use Exception;
+use Mockery;
 use WyriHaximus\AsyncTestUtilities\AsyncTestCase;
 use WyriHaximus\React\Cache\Redis;
 
@@ -12,159 +13,158 @@ use function React\Async\await;
 use function React\Promise\reject;
 use function React\Promise\resolve;
 
-/** @internal */
 final class RedisTest extends AsyncTestCase
 {
     public function testGet(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
         $value  = 'value';
-        $client->exists($prefix . $key)->shouldBeCalled()->willReturn(resolve(1));
-        $client->get($prefix . $key)->shouldBeCalled()->willReturn(resolve($value));
-        $promise = (new Redis($client->reveal(), $prefix))->get($key);
+        $client->expects('exists')->with($prefix . $key)->once()->andReturn(resolve(1));
+        $client->expects('get')->with($prefix . $key)->once()->andReturn(resolve($value));
+        $promise = (new Redis($client, $prefix))->get($key);
 
         self::assertSame($value, await($promise));
     }
 
     public function testGetNonExistant(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
-        $client->exists($prefix . $key)->shouldBeCalled()->willReturn(resolve(0));
-        $client->get($prefix . $key)->shouldBeCalled()->willReturn(resolve(null));
-        self::assertNull(await((new Redis($client->reveal(), $prefix))->get($key)));
+        $client->expects('exists')->with($prefix . $key)->once()->andReturn(resolve(0));
+        $client->expects('get')->with($prefix . $key)->once()->andReturn(resolve(null));
+        self::assertNull(await((new Redis($client, $prefix))->get($key)));
     }
 
     public function testSet(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
         $value  = 'value';
-        $client->set($prefix . $key, $value)->shouldBeCalled()->willReturn(resolve('OK'));
-        (new Redis($client->reveal(), $prefix))->set($key, $value);
+        $client->expects('set')->with($prefix . $key, $value)->once()->andReturn(resolve('OK'));
+        (new Redis($client, $prefix))->set($key, $value);
     }
 
     public function testSetGlobalTtl(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
         $value  = 'value';
         $ttl    = 123;
-        $client->psetex($prefix . $key, $ttl * 1000, $value)->shouldBeCalled()->willReturn(resolve(null));
-        self::assertTrue(await((new Redis($client->reveal(), $prefix, $ttl))->set($key, $value)));
+        $client->expects('psetex')->with($prefix . $key, $ttl * 1000, $value)->once()->andReturn(resolve(null));
+        self::assertTrue(await((new Redis($client, $prefix, $ttl))->set($key, $value)));
     }
 
     public function testSetTtl(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
         $value  = 'value';
         $ttl    = 123;
-        $client->psetex($prefix . $key, $ttl * 1000, $value)->shouldBeCalled()->willReturn(resolve(null));
-        self::assertTrue(await((new Redis($client->reveal(), $prefix))->set($key, $value, $ttl)));
+        $client->expects('psetex')->with($prefix . $key, $ttl * 1000, $value)->once()->andReturn(resolve(null));
+        self::assertTrue(await((new Redis($client, $prefix))->set($key, $value, $ttl)));
     }
 
     public function testSetTtlException(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
         $value  = 'value';
         $ttl    = 123;
-        $client->psetex($prefix . $key, $ttl * 1000, $value)->shouldBeCalled()->willReturn(reject(new Exception('fail!')));
-        self::assertFalse(await((new Redis($client->reveal(), $prefix))->set($key, $value, $ttl)));
+        $client->expects('psetex')->with($prefix . $key, $ttl * 1000, $value)->once()->andReturn(reject(new Exception('fail!')));
+        self::assertFalse(await((new Redis($client, $prefix))->set($key, $value, $ttl)));
     }
 
     public function testSetException(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
         $value  = 'value';
-        $client->set($prefix . $key, $value)->shouldBeCalled()->willReturn(reject(new Exception('fail!')));
-        self::assertFalse(await((new Redis($client->reveal(), $prefix))->set($key, $value)));
+        $client->expects('set')->with($prefix . $key, $value)->once()->andReturn(reject(new Exception('fail!')));
+        self::assertFalse(await((new Redis($client, $prefix))->set($key, $value)));
     }
 
     public function testDelete(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
-        $client->del($prefix . $key)->shouldBeCalled()->willReturn(resolve(1));
-        (new Redis($client->reveal(), $prefix))->delete($key);
+        $client->expects('del')->with($prefix . $key)->once()->andReturn(resolve(1));
+        (new Redis($client, $prefix))->delete($key);
     }
 
     public function testDeleteException(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
-        $client->del($prefix . $key)->shouldBeCalled()->willReturn(reject(new Exception('fail!')));
-        (new Redis($client->reveal(), $prefix))->delete($key);
+        $client->expects('del')->with($prefix . $key)->once()->andReturn(reject(new Exception('fail!')));
+        (new Redis($client, $prefix))->delete($key);
     }
 
     public function testHas(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
-        $client->exists($prefix . $key)->shouldBeCalled()->willReturn(resolve(1));
-        (new Redis($client->reveal(), $prefix))->has($key);
+        $client->expects('exists')->with($prefix . $key)->once()->andReturn(resolve(1));
+        (new Redis($client, $prefix))->has($key);
     }
 
     public function testDeleteMultiple(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
-        $client->del($prefix . $key)->shouldBeCalled()->willReturn(resolve(1));
-        (new Redis($client->reveal(), $prefix))->deleteMultiple([$key]);
+        $client->expects('del')->with($prefix . $key)->once()->andReturn(resolve(1));
+        (new Redis($client, $prefix))->deleteMultiple([$key]);
     }
 
     public function testDeleteMultipleException(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
-        $client->del($prefix . $key)->shouldBeCalled()->willReturn(reject(new Exception('fail!')));
-        (new Redis($client->reveal(), $prefix))->deleteMultiple([$key]);
+        $client->expects('del')->with($prefix . $key)->once()->andReturn(reject(new Exception('fail!')));
+        (new Redis($client, $prefix))->deleteMultiple([$key]);
     }
 
     public function testCLear(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
-        $client->keys($prefix . '*')->shouldBeCalled()->willReturn(resolve([$key]));
-        $client->del($prefix . $key)->shouldBeCalled()->willReturn(resolve(1));
-        (new Redis($client->reveal(), $prefix))->clear();
+        $client->expects('keys')->with($prefix . '*')->once()->andReturn(resolve([$key]));
+        $client->expects('del')->with($prefix . $key)->once()->andReturn(resolve(1));
+        (new Redis($client, $prefix))->clear();
     }
 
     public function testSetMultiple(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
         $value  = 'value';
         $ttl    = 123;
-        $client->psetex($prefix . $key, $ttl * 1000, $value)->shouldBeCalled()->willReturn(resolve(true));
-        self::assertSame(true, await((new Redis($client->reveal(), $prefix))->setMultiple([$key => $value], $ttl))); /** @phpstan-ignore-line */
+        $client->expects('psetex')->with($prefix . $key, $ttl * 1000, $value)->once()->andReturn(resolve(true));
+        self::assertSame(true, await((new Redis($client, $prefix))->setMultiple([$key => $value], $ttl))); /** @phpstan-ignore-line */
     }
 
     public function testGetMultiple(): void
     {
-        $client = $this->prophesize(ClientStub::class);
+        $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
         $key    = 'key';
         $value  = 'value';
-        $client->exists($prefix . $key)->shouldBeCalled()->willReturn(resolve(true));
-        $client->get($prefix . $key)->shouldBeCalled()->willReturn(resolve($value));
-        self::assertSame([$key => $value], await((new Redis($client->reveal(), $prefix))->getMultiple([$key])));
+        $client->expects('exists')->with($prefix . $key)->once()->andReturn(resolve(true));
+        $client->expects('get')->with($prefix . $key)->once()->andReturn(resolve($value));
+        self::assertSame([$key => $value], await((new Redis($client, $prefix))->getMultiple([$key])));
     }
 }

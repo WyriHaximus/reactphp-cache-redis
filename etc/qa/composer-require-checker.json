@@ -2,8 +2,7 @@
   "symbol-whitelist" : [
     "null", "true", "false",
     "static", "self", "parent",
-    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object", "mixed",
-    "Safe\\json_encode", "futurePromise", "WyriHaximus\\Constants\\ComposerAutoloader\\LOCATION"
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object", "mixed"
   ],
   "php-core-extensions" : [
     "Core",

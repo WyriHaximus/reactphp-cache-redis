@@ -16,17 +16,17 @@ class ClientStub implements Client
     use EventEmitterTrait;
 
     /** @phpstan-ignore-next-line */
-    public function __call($name, $args): void //phpcs:disabled
+    public function __call($name, $args) //phpcs:disabled
     {
-        // TODO: Implement __call() method.
+        return resolve(null);
     }
 
-    public function end(): void
+    public function end()
     {
         // TODO: Implement end() method.
     }
 
-    public function close(): void
+    public function close()
     {
         // TODO: Implement close() method.
     }
@@ -74,7 +74,7 @@ class ClientStub implements Client
     /**
      * @return PromiseInterface<array<string>>
      */
-    public function keys(): PromiseInterface
+    public function keys(string $keys): PromiseInterface
     {
         return resolve(['string']);
     }

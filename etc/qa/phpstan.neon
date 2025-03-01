@@ -1,5 +1,8 @@
 parameters:
 	level: max
+	ignoreErrors:
+		-
+			message: '#thecodingmachine/safe#'
 	ergebnis:
 		noExtends:
 			classesAllowedToBeExtended:

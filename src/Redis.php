@@ -7,11 +7,16 @@ namespace WyriHaximus\React\Cache;
 use Clue\React\Redis\Client;
 use React\Cache\CacheInterface;
 use React\Promise\PromiseInterface;
+use RuntimeException;
 
+use function preg_last_error;
+use function preg_last_error_msg;
 use function preg_quote;
+use function preg_replace;
 use function React\Promise\all;
 use function React\Promise\resolve;
-use function Safe\preg_replace;
+
+use const PREG_NO_ERROR;
 
 final class Redis implements CacheInterface
 {
@@ -26,11 +31,6 @@ final class Redis implements CacheInterface
      */
     public function get($key, $default = null): PromiseInterface
     {
-        /**
-         * @psalm-suppress MissingClosureParamType
-         * @psalm-suppress TooManyTemplateParams
-         * @psalm-suppress InvalidArgument
-         */
         return $this->has($key)->then(function ($result) use ($key): PromiseInterface {
             if ($result === false) {
                 return resolve(null);
@@ -97,18 +97,12 @@ final class Redis implements CacheInterface
     public function setMultiple(array $values, $ttl = null)
     {
         $promises = [];
-        /** @psalm-suppress MixedAssignment */
         foreach ($values as $key => $value) {
             $promises[$key] = $this->set((string) $key, $value, $ttl);
         }
 
-        /**
-         * @param PromiseInterface<bool> $bools
-         *
-         * @psalm-suppress InvalidArgument
-         */
+        /** @param PromiseInterface<bool> $bools */
         return all($promises)->then(static function (array $bools): bool {
-            /** @psalm-suppress MixedAssignment */
             foreach ($bools as $bool) {
                 if (! $bool) {
                     return false;
@@ -126,7 +120,6 @@ final class Redis implements CacheInterface
             $keys[$index] = $this->prefix . $key;
         }
 
-        /** @psalm-suppress InvalidArgument */
         return $this->client->del(...$keys)->then( /** @phpstan-ignore-line */
             static fn (): PromiseInterface => resolve(true),
             static fn (): PromiseInterface => resolve(false),
@@ -136,30 +129,23 @@ final class Redis implements CacheInterface
     /** @inheritDoc */
     public function clear()
     {
-        /**
-         * @psalm-suppress TooManyTemplateParams
-         * @psalm-suppress InvalidArgument
-         */
         return $this->client->keys($this->prefix . '*')->then( /** @phpstan-ignore-line */
             function (array $keys): PromiseInterface {
-            /** @var array<string> $keys */
-                $keys = preg_replace('|^' . preg_quote($this->prefix) . '|', '', $keys);
+                /** @var array<string> $matchedKeys */
+                $matchedKeys = preg_replace('|^' . preg_quote($this->prefix) . '|', '', $keys);
+                if (preg_last_error() !== PREG_NO_ERROR) {
+                    throw new RuntimeException(preg_last_error_msg());
+                }
 
-                return $this->deleteMultiple($keys);
+                return $this->deleteMultiple($matchedKeys);
             },
         );
     }
 
-    /**
-     * @inheritDoc
-     * @psalm-suppress MixedReturnTypeCoercion
-     */
+    /** @inheritDoc */
     public function has($key)
     {
-        /**
-         * @psalm-suppress MixedReturnTypeCoercion
-         * @phpstan-ignore-next-line
-         */
+        /** @phpstan-ignore-next-line */
         return $this->client->exists($this->prefix . $key);
     }
 }
