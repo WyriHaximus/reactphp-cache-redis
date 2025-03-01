@@ -10,14 +10,13 @@
     ],
     "require": {
         "php": "^8.2",
-        "clue/redis-react": "^2.7",
+        "clue/redis-react": "^2.8",
         "evenement/evenement": "^3.0.2",
         "react/cache": "^1.2",
-        "react/promise": "^3.1",
-        "thecodingmachine/safe": "^2"
+        "react/promise": "^3.2"
     },
     "require-dev": {
-        "wyrihaximus/async-test-utilities": "^7.2"
+        "wyrihaximus/async-test-utilities": "^8.0.5"
     },
     "autoload": {
         "psr-4": {
