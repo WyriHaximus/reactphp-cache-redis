@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "clue/redis-react": "^2.8",
         "evenement/evenement": "^3.0.2",
         "react/cache": "^1.2",
@@ -36,7 +36,7 @@
             "infection/extension-installer": true
         },
         "platform": {
-            "php": "8.2.13"
+            "php": "8.3.13"
         },
         "sort-packages": true
     },

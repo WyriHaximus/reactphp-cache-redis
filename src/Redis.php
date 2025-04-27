@@ -20,8 +20,11 @@ use const PREG_NO_ERROR;
 
 final class Redis implements CacheInterface
 {
+    private const string DEFAULT_PREFIX = 'react:cache:';
+    private const int DEFAULT_TTL       = 0;
+
     /** @phpstan-ignore-next-line */
-    public function __construct(private Client $client, private string $prefix = 'react:cache:', private int $ttl = 0)
+    public function __construct(private Client $client, private string $prefix = self::DEFAULT_PREFIX, private int $ttl = self::DEFAULT_TTL)
     {
     }
 
