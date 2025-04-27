@@ -13,7 +13,7 @@ Use Redis as a cache, implementing the [react/cache interface](https://github.co
 To install via [Composer](http://getcomposer.org/), use the command below, it will automatically detect the latest version and bind it with `^`.
 
 ```
-composer require wyrihaximus/react-cache-redis 
+composer require wyrihaximus/react-cache-redis
 ```
 
 # Usage
@@ -25,16 +25,15 @@ use Clue\React\Redis\Client;
 use Clue\React\Redis\Factory;
 use WyriHaximus\React\Cache\Redis;
 
-(new Factory())->createClient()->then(function (Client $client) {
-    $cache = new Redis($client, 'react:cache:your:key:prefix:');
-});
+$client = (new Factory())->createLazyClient();
+$cache = new Redis($client, 'react:cache:your:key:prefix:');
 ```
 
 # License
 
 The MIT License (MIT)
 
-Copyright (c) 2024 Cees-Jan Kiewiet
+Copyright (c) 2025 Cees-Jan Kiewiet
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
