@@ -34,7 +34,7 @@ final class Redis implements CacheInterface
      */
     public function get($key, $default = null): PromiseInterface
     {
-        return $this->has($key)->then(function ($result) use ($key): PromiseInterface {
+        return $this->has($key)->then(function (mixed $result) use ($key): PromiseInterface {
             if ($result === false) {
                 return resolve(null);
             }
@@ -116,7 +116,10 @@ final class Redis implements CacheInterface
         });
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     * @phpstan-ignore-next-line
+     */
     public function deleteMultiple(array $keys)
     {
         foreach ($keys as $index => $key) {
@@ -129,14 +132,21 @@ final class Redis implements CacheInterface
         );
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     * @phpstan-ignore-next-line
+     */
     public function clear()
     {
         return $this->client->keys($this->prefix . '*')->then( /** @phpstan-ignore-line */
             function (array $keys): PromiseInterface {
-                /** @var array<string> $matchedKeys */
+                /**
+                 * @var array<string> $matchedKeys
+                 * @phpstan-ignore-next-line
+                 */
                 $matchedKeys = preg_replace('|^' . preg_quote($this->prefix) . '|', '', $keys);
                 if (preg_last_error() !== PREG_NO_ERROR) {
+                    /** @phpstan-ignore-next-line */
                     throw new RuntimeException(preg_last_error_msg());
                 }
 
@@ -145,7 +155,10 @@ final class Redis implements CacheInterface
         );
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     * @phpstan-ignore-next-line
+     */
     public function has($key)
     {
         /** @phpstan-ignore-next-line */
