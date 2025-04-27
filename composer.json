@@ -16,7 +16,8 @@
         "react/promise": "^3.2"
     },
     "require-dev": {
-        "wyrihaximus/async-test-utilities": "^8.0.5"
+        "wyrihaximus/async-test-utilities": "^9.0.0",
+        "wyrihaximus/makefiles": "^0.3.1"
     },
     "autoload": {
         "psr-4": {
@@ -33,7 +34,9 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "ergebnis/composer-normalize": true,
             "icanhazstring/composer-unused": true,
-            "infection/extension-installer": true
+            "infection/extension-installer": true,
+            "phpstan/extension-installer": true,
+            "wyrihaximus/makefiles": true
         },
         "platform": {
             "php": "8.3.13"

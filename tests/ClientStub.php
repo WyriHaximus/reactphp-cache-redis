@@ -21,11 +21,13 @@ class ClientStub implements Client
         return resolve(null);
     }
 
+    /** @phpstan-ignore-next-line */
     public function end()
     {
         // TODO: Implement end() method.
     }
 
+    /** @phpstan-ignore-next-line */
     public function close()
     {
         // TODO: Implement close() method.
