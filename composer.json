@@ -1,54 +1,55 @@
 {
-    "name": "wyrihaximus/react-cache-redis",
-    "description": "Redis cache for react/cache",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Cees-Jan Kiewiet",
-            "email": "ceesjank@gmail.com"
-        }
-    ],
-    "require": {
-        "php": "^8.3",
-        "clue/redis-react": "^2.8",
-        "evenement/evenement": "^3.0.2",
-        "react/cache": "^1.2",
-        "react/promise": "^3.2"
-    },
-    "require-dev": {
-        "wyrihaximus/async-test-utilities": "^9.4.2",
-        "wyrihaximus/makefiles": "^0.5.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "WyriHaximus\\React\\Cache\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "WyriHaximus\\Tests\\React\\Cache\\": "tests/"
-        }
-    },
-    "config": {
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "ergebnis/composer-normalize": true,
-            "icanhazstring/composer-unused": true,
-            "infection/extension-installer": true,
-            "phpstan/extension-installer": true,
-            "wyrihaximus/makefiles": true
-        },
-        "platform": {
-            "php": "8.3.13"
-        },
-        "sort-packages": true
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "composer normalize"
-        ],
-        "post-update-cmd": [
-            "composer normalize"
-        ]
+  "name": "wyrihaximus/react-cache-redis",
+  "description": "Redis cache for react/cache",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Cees-Jan Kiewiet",
+      "email": "ceesjank@gmail.com"
     }
+  ],
+  "require": {
+    "php": "^8.4",
+    "clue/redis-react": "^2.8",
+    "evenement/evenement": "^3.0.2",
+    "react/cache": "^1.2",
+    "react/promise": "^3.2"
+  },
+  "require-dev": {
+    "wyrihaximus/async-test-utilities": "^10.4.0",
+    "wyrihaximus/makefiles": "^0.5.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "WyriHaximus\\React\\Cache\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WyriHaximus\\Tests\\React\\Cache\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "ergebnis/composer-normalize": true,
+      "icanhazstring/composer-unused": true,
+      "infection/extension-installer": true,
+      "phpstan/extension-installer": true,
+      "wyrihaximus/makefiles": true,
+      "wyrihaximus/test-utilities": true
+    },
+    "platform": {
+      "php": "8.4.13"
+    },
+    "sort-packages": true
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "make on-install-or-update || true"
+    ],
+    "post-update-cmd": [
+      "make on-install-or-update || true"
+    ]
+  }
 }
