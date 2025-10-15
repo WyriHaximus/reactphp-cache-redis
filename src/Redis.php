@@ -9,6 +9,7 @@ use React\Cache\CacheInterface;
 use React\Promise\PromiseInterface;
 use RuntimeException;
 
+use function array_all;
 use function preg_last_error;
 use function preg_last_error_msg;
 use function preg_quote;
@@ -18,7 +19,7 @@ use function React\Promise\resolve;
 
 use const PREG_NO_ERROR;
 
-final class Redis implements CacheInterface
+final readonly class Redis implements CacheInterface
 {
     private const string DEFAULT_PREFIX = 'react:cache:';
     private const int DEFAULT_TTL       = 0;
@@ -69,7 +70,10 @@ final class Redis implements CacheInterface
         );
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     * @phpstan-ignore-next-line
+     */
     public function delete($key): PromiseInterface
     {
         /** @phpstan-ignore-next-line */
@@ -105,15 +109,7 @@ final class Redis implements CacheInterface
         }
 
         /** @param PromiseInterface<bool> $bools */
-        return all($promises)->then(static function (array $bools): bool {
-            foreach ($bools as $bool) {
-                if (! $bool) {
-                    return false;
-                }
-            }
-
-            return true;
-        });
+        return all($promises)->then(static fn (array $bools): bool => array_all($bools, static fn (bool $bool): bool => $bool));
     }
 
     /**
