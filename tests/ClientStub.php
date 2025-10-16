@@ -21,14 +21,12 @@ class ClientStub implements Client
         return resolve(null);
     }
 
-    /** @phpstan-ignore-next-line */
-    public function end()
+    public function end(): void
     {
         // TODO: Implement end() method.
     }
 
-    /** @phpstan-ignore-next-line */
-    public function close()
+    public function close(): void
     {
         // TODO: Implement close() method.
     }
@@ -84,7 +82,7 @@ class ClientStub implements Client
     /**
      * @phpstan-ignore-next-line
      */
-    public function isBusy() //phpcs:disabled
+    public function isBusy(): bool //phpcs:disabled
     {
         return true;
     }

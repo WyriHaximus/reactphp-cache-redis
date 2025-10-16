@@ -23,7 +23,7 @@ final class RedisTest extends AsyncTestCase
         $value  = 'value';
         $client->expects('exists')->with($prefix . $key)->once()->andReturn(resolve(1));
         $client->expects('get')->with($prefix . $key)->once()->andReturn(resolve($value));
-        $promise = (new Redis($client, $prefix))->get($key);
+        $promise = new Redis($client, $prefix)->get($key);
 
         self::assertSame($value, await($promise));
     }
@@ -35,7 +35,7 @@ final class RedisTest extends AsyncTestCase
         $key    = 'key';
         $client->expects('exists')->with($prefix . $key)->once()->andReturn(resolve(0));
         $client->expects('get')->with($prefix . $key)->once()->andReturn(resolve(null));
-        self::assertNull(await((new Redis($client, $prefix))->get($key)));
+        self::assertNull(await(new Redis($client, $prefix)->get($key)));
     }
 
     public function testSet(): void
@@ -45,7 +45,7 @@ final class RedisTest extends AsyncTestCase
         $key    = 'key';
         $value  = 'value';
         $client->expects('set')->with($prefix . $key, $value)->once()->andReturn(resolve('OK'));
-        (new Redis($client, $prefix))->set($key, $value);
+        new Redis($client, $prefix)->set($key, $value);
     }
 
     public function testSetGlobalTtl(): void
@@ -56,7 +56,7 @@ final class RedisTest extends AsyncTestCase
         $value  = 'value';
         $ttl    = 123;
         $client->expects('psetex')->with($prefix . $key, $ttl * 1000, $value)->once()->andReturn(resolve(null));
-        self::assertTrue(await((new Redis($client, $prefix, $ttl))->set($key, $value)));
+        self::assertTrue(await(new Redis($client, $prefix, $ttl)->set($key, $value)));
     }
 
     public function testSetTtl(): void
@@ -67,7 +67,7 @@ final class RedisTest extends AsyncTestCase
         $value  = 'value';
         $ttl    = 123;
         $client->expects('psetex')->with($prefix . $key, $ttl * 1000, $value)->once()->andReturn(resolve(null));
-        self::assertTrue(await((new Redis($client, $prefix))->set($key, $value, $ttl)));
+        self::assertTrue(await(new Redis($client, $prefix)->set($key, $value, $ttl)));
     }
 
     public function testSetTtlException(): void
@@ -78,7 +78,7 @@ final class RedisTest extends AsyncTestCase
         $value  = 'value';
         $ttl    = 123;
         $client->expects('psetex')->with($prefix . $key, $ttl * 1000, $value)->once()->andReturn(reject(new Exception('fail!')));
-        self::assertFalse(await((new Redis($client, $prefix))->set($key, $value, $ttl)));
+        self::assertFalse(await(new Redis($client, $prefix)->set($key, $value, $ttl)));
     }
 
     public function testSetException(): void
@@ -88,7 +88,7 @@ final class RedisTest extends AsyncTestCase
         $key    = 'key';
         $value  = 'value';
         $client->expects('set')->with($prefix . $key, $value)->once()->andReturn(reject(new Exception('fail!')));
-        self::assertFalse(await((new Redis($client, $prefix))->set($key, $value)));
+        self::assertFalse(await(new Redis($client, $prefix)->set($key, $value)));
     }
 
     public function testDelete(): void
@@ -97,7 +97,7 @@ final class RedisTest extends AsyncTestCase
         $prefix = 'root:';
         $key    = 'key';
         $client->expects('del')->with($prefix . $key)->once()->andReturn(resolve(1));
-        (new Redis($client, $prefix))->delete($key);
+        new Redis($client, $prefix)->delete($key);
     }
 
     public function testDeleteException(): void
@@ -106,7 +106,7 @@ final class RedisTest extends AsyncTestCase
         $prefix = 'root:';
         $key    = 'key';
         $client->expects('del')->with($prefix . $key)->once()->andReturn(reject(new Exception('fail!')));
-        (new Redis($client, $prefix))->delete($key);
+        new Redis($client, $prefix)->delete($key);
     }
 
     public function testHas(): void
@@ -115,7 +115,7 @@ final class RedisTest extends AsyncTestCase
         $prefix = 'root:';
         $key    = 'key';
         $client->expects('exists')->with($prefix . $key)->once()->andReturn(resolve(1));
-        (new Redis($client, $prefix))->has($key);
+        new Redis($client, $prefix)->has($key);
     }
 
     public function testDeleteMultiple(): void
@@ -124,7 +124,7 @@ final class RedisTest extends AsyncTestCase
         $prefix = 'root:';
         $key    = 'key';
         $client->expects('del')->with($prefix . $key)->once()->andReturn(resolve(1));
-        (new Redis($client, $prefix))->deleteMultiple([$key]);
+        new Redis($client, $prefix)->deleteMultiple([$key]);
     }
 
     public function testDeleteMultipleException(): void
@@ -133,7 +133,7 @@ final class RedisTest extends AsyncTestCase
         $prefix = 'root:';
         $key    = 'key';
         $client->expects('del')->with($prefix . $key)->once()->andReturn(reject(new Exception('fail!')));
-        (new Redis($client, $prefix))->deleteMultiple([$key]);
+        new Redis($client, $prefix)->deleteMultiple([$key]);
     }
 
     public function testCLear(): void
@@ -143,7 +143,7 @@ final class RedisTest extends AsyncTestCase
         $key    = 'key';
         $client->expects('keys')->with($prefix . '*')->once()->andReturn(resolve([$key]));
         $client->expects('del')->with($prefix . $key)->once()->andReturn(resolve(1));
-        (new Redis($client, $prefix))->clear();
+        new Redis($client, $prefix)->clear();
     }
 
     public function testSetMultiple(): void
@@ -154,7 +154,7 @@ final class RedisTest extends AsyncTestCase
         $value  = 'value';
         $ttl    = 123;
         $client->expects('psetex')->with($prefix . $key, $ttl * 1000, $value)->once()->andReturn(resolve(true));
-        self::assertSame(true, await((new Redis($client, $prefix))->setMultiple([$key => $value], $ttl))); /** @phpstan-ignore-line */
+        self::assertSame(true, await(new Redis($client, $prefix)->setMultiple([$key => $value], $ttl))); /** @phpstan-ignore-line */
     }
 
     public function testGetMultiple(): void
@@ -165,6 +165,6 @@ final class RedisTest extends AsyncTestCase
         $value  = 'value';
         $client->expects('exists')->with($prefix . $key)->once()->andReturn(resolve(true));
         $client->expects('get')->with($prefix . $key)->once()->andReturn(resolve($value));
-        self::assertSame([$key => $value], await((new Redis($client, $prefix))->getMultiple([$key])));
+        self::assertSame([$key => $value], await(new Redis($client, $prefix)->getMultiple([$key])));
     }
 }
