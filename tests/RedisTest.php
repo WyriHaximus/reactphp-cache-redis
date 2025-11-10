@@ -6,6 +6,7 @@ namespace WyriHaximus\Tests\React\Cache;
 
 use Exception;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use WyriHaximus\AsyncTestUtilities\AsyncTestCase;
 use WyriHaximus\React\Cache\Redis;
 
@@ -15,7 +16,8 @@ use function React\Promise\resolve;
 
 final class RedisTest extends AsyncTestCase
 {
-    public function testGet(): void
+    #[Test]
+    public function get(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
@@ -28,7 +30,8 @@ final class RedisTest extends AsyncTestCase
         self::assertSame($value, await($promise));
     }
 
-    public function testGetNonExistant(): void
+    #[Test]
+    public function getNonExistant(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
@@ -38,7 +41,8 @@ final class RedisTest extends AsyncTestCase
         self::assertNull(await(new Redis($client, $prefix)->get($key)));
     }
 
-    public function testSet(): void
+    #[Test]
+    public function set(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
@@ -48,7 +52,8 @@ final class RedisTest extends AsyncTestCase
         new Redis($client, $prefix)->set($key, $value);
     }
 
-    public function testSetGlobalTtl(): void
+    #[Test]
+    public function setGlobalTtl(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
@@ -59,7 +64,8 @@ final class RedisTest extends AsyncTestCase
         self::assertTrue(await(new Redis($client, $prefix, $ttl)->set($key, $value)));
     }
 
-    public function testSetTtl(): void
+    #[Test]
+    public function setTtl(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
@@ -70,7 +76,8 @@ final class RedisTest extends AsyncTestCase
         self::assertTrue(await(new Redis($client, $prefix)->set($key, $value, $ttl)));
     }
 
-    public function testSetTtlException(): void
+    #[Test]
+    public function setTtlException(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
@@ -81,7 +88,8 @@ final class RedisTest extends AsyncTestCase
         self::assertFalse(await(new Redis($client, $prefix)->set($key, $value, $ttl)));
     }
 
-    public function testSetException(): void
+    #[Test]
+    public function setException(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
@@ -91,7 +99,8 @@ final class RedisTest extends AsyncTestCase
         self::assertFalse(await(new Redis($client, $prefix)->set($key, $value)));
     }
 
-    public function testDelete(): void
+    #[Test]
+    public function delete(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
@@ -100,7 +109,8 @@ final class RedisTest extends AsyncTestCase
         new Redis($client, $prefix)->delete($key);
     }
 
-    public function testDeleteException(): void
+    #[Test]
+    public function deleteException(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
@@ -109,7 +119,8 @@ final class RedisTest extends AsyncTestCase
         new Redis($client, $prefix)->delete($key);
     }
 
-    public function testHas(): void
+    #[Test]
+    public function has(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
@@ -118,7 +129,8 @@ final class RedisTest extends AsyncTestCase
         new Redis($client, $prefix)->has($key);
     }
 
-    public function testDeleteMultiple(): void
+    #[Test]
+    public function deleteMultiple(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
@@ -127,7 +139,8 @@ final class RedisTest extends AsyncTestCase
         new Redis($client, $prefix)->deleteMultiple([$key]);
     }
 
-    public function testDeleteMultipleException(): void
+    #[Test]
+    public function deleteMultipleException(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
@@ -136,7 +149,8 @@ final class RedisTest extends AsyncTestCase
         new Redis($client, $prefix)->deleteMultiple([$key]);
     }
 
-    public function testCLear(): void
+    #[Test]
+    public function cLear(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
@@ -146,7 +160,8 @@ final class RedisTest extends AsyncTestCase
         new Redis($client, $prefix)->clear();
     }
 
-    public function testSetMultiple(): void
+    #[Test]
+    public function setMultiple(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
@@ -157,7 +172,8 @@ final class RedisTest extends AsyncTestCase
         self::assertSame(true, await(new Redis($client, $prefix)->setMultiple([$key => $value], $ttl))); /** @phpstan-ignore-line */
     }
 
-    public function testGetMultiple(): void
+    #[Test]
+    public function getMultiple(): void
     {
         $client = Mockery::mock(ClientStub::class);
         $prefix = 'root:';
