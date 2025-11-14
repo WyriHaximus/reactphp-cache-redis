@@ -3,7 +3,9 @@
 
 # Ignoring files for distribution archieves
 .github/ export-ignore
-etc/ export-ignore
+etc/ci/ export-ignore
+etc/qa/ export-ignore
+examples/ export-ignore
 tests/ export-ignore
 var/ export-ignore
 .devcontainer.json export-ignore
@@ -12,7 +14,6 @@ var/ export-ignore
 .gitignore export-ignore
 CONTRIBUTING.md export-ignore
 composer.lock export-ignore
-infection.json.dist export-ignore
 Makefile export-ignore
 README.md export-ignore
 
