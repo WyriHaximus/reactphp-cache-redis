@@ -16,7 +16,7 @@
     "react/promise": "^3.2"
   },
   "require-dev": {
-    "wyrihaximus/async-test-utilities": "^10.7.0",
+    "wyrihaximus/async-test-utilities": "^12.0.0",
     "wyrihaximus/makefiles": "^0.7.15"
   },
   "autoload": {
