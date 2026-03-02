@@ -17,7 +17,7 @@
   },
   "require-dev": {
     "wyrihaximus/async-test-utilities": "^12.0.0",
-    "wyrihaximus/makefiles": "^0.7.15"
+    "wyrihaximus/makefiles": "^0.10.2"
   },
   "autoload": {
     "psr-4": {
