@@ -24,15 +24,11 @@ final readonly class Redis implements CacheInterface
     private const string DEFAULT_PREFIX = 'react:cache:';
     private const int DEFAULT_TTL       = 0;
 
-    /** @phpstan-ignore-next-line */
     public function __construct(private Client $client, private string $prefix = self::DEFAULT_PREFIX, private int $ttl = self::DEFAULT_TTL)
     {
     }
 
-    /**
-     * @inheritDoc
-     * @phpstan-ignore-next-line
-     */
+    /** @inheritDoc */
     public function get($key, $default = null): PromiseInterface
     {
         return $this->has($key)->then(function (mixed $result) use ($key): PromiseInterface {
@@ -40,53 +36,40 @@ final readonly class Redis implements CacheInterface
                 return resolve(null);
             }
 
-            /** @phpstan-ignore-next-line */
             return $this->client->get($this->prefix . $key);
         });
     }
 
-    /**
-     * @inheritDoc
-     * @phpstan-ignore-next-line
-     */
+    /** @inheritDoc */
     public function set($key, $value, $ttl = null): PromiseInterface
     {
         if ($this->ttl === 0 && $ttl === null) {
-            /** @phpstan-ignore-next-line */
             return $this->client->set($this->prefix . $key, (string) $value)->then(
                 static fn (): PromiseInterface => resolve(true),
                 static fn (): PromiseInterface => resolve(false),
             );
         }
 
-        /** @phpstan-ignore-next-line */
         return $this->client->psetex(
             $this->prefix . $key,
             (string) ((float) ($this->ttl > 0 ? $this->ttl : $ttl) * 1000),
-            (string) $value, /** @phpstan-ignore-line */
+            (string) $value,
         )->then(
             static fn (): PromiseInterface => resolve(true),
             static fn (): PromiseInterface => resolve(false),
         );
     }
 
-    /**
-     * @inheritDoc
-     * @phpstan-ignore-next-line
-     */
+    /** @inheritDoc */
     public function delete($key): PromiseInterface
     {
-        /** @phpstan-ignore-next-line */
         return $this->client->del($this->prefix . $key)->then(
             static fn (): PromiseInterface => resolve(true),
             static fn (): PromiseInterface => resolve(false),
         );
     }
 
-    /**
-     * @inheritDoc
-     * @phpstan-ignore-next-line
-     */
+    /** @inheritDoc */
     public function getMultiple(array $keys, $default = null)
     {
         $promises = [];
@@ -97,10 +80,7 @@ final readonly class Redis implements CacheInterface
         return all($promises);
     }
 
-    /**
-     * @inheritDoc
-     * @phpstan-ignore-next-line
-     */
+    /** @inheritDoc */
     public function setMultiple(array $values, $ttl = null)
     {
         $promises = [];
@@ -112,37 +92,27 @@ final readonly class Redis implements CacheInterface
         return all($promises)->then(static fn (array $bools): bool => array_all($bools, static fn (bool $bool): bool => $bool));
     }
 
-    /**
-     * @inheritDoc
-     * @phpstan-ignore-next-line
-     */
+    /** @inheritDoc */
     public function deleteMultiple(array $keys)
     {
         foreach ($keys as $index => $key) {
             $keys[$index] = $this->prefix . $key;
         }
 
-        return $this->client->del(...$keys)->then( /** @phpstan-ignore-line */
+        return $this->client->del(...$keys)->then(
             static fn (): PromiseInterface => resolve(true),
             static fn (): PromiseInterface => resolve(false),
         );
     }
 
-    /**
-     * @inheritDoc
-     * @phpstan-ignore-next-line
-     */
+    /** @inheritDoc */
     public function clear()
     {
-        return $this->client->keys($this->prefix . '*')->then( /** @phpstan-ignore-line */
+        return $this->client->keys($this->prefix . '*')->then(
             function (array $keys): PromiseInterface {
-                /**
-                 * @var array<string> $matchedKeys
-                 * @phpstan-ignore-next-line
-                 */
+                /** @var array<string> $matchedKeys */
                 $matchedKeys = preg_replace('|^' . preg_quote($this->prefix) . '|', '', $keys);
                 if (preg_last_error() !== PREG_NO_ERROR) {
-                    /** @phpstan-ignore-next-line */
                     throw new RuntimeException(preg_last_error_msg());
                 }
 
@@ -151,13 +121,9 @@ final readonly class Redis implements CacheInterface
         );
     }
 
-    /**
-     * @inheritDoc
-     * @phpstan-ignore-next-line
-     */
+    /** @inheritDoc */
     public function has($key)
     {
-        /** @phpstan-ignore-next-line */
         return $this->client->exists($this->prefix . $key);
     }
 }
