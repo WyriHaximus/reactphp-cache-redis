@@ -169,7 +169,7 @@ final class RedisTest extends AsyncTestCase
         $value  = 'value';
         $ttl    = 123;
         $client->expects('psetex')->with($prefix . $key, $ttl * 1000, $value)->once()->andReturn(resolve(true));
-        self::assertSame(true, await(new Redis($client, $prefix)->setMultiple([$key => $value], $ttl))); /** @phpstan-ignore-line */
+        self::assertSame(true, await(new Redis($client, $prefix)->setMultiple([$key => $value], $ttl)));
     }
 
     #[Test]
