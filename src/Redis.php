@@ -64,16 +64,13 @@ final readonly class Redis implements CacheInterface
             $this->prefix . $key,
             (string) ((float) ($this->ttl > 0 ? $this->ttl : $ttl) * 1000),
             (string) $value, /** @phpstan-ignore-line */
-        )->then(
+        )->then(/** @phpstan-ignore-line */
             static fn (): PromiseInterface => resolve(true),
             static fn (): PromiseInterface => resolve(false),
         );
     }
 
-    /**
-     * @inheritDoc
-     * @phpstan-ignore-next-line
-     */
+    /** @inheritDoc */
     public function delete($key): PromiseInterface
     {
         /** @phpstan-ignore-next-line */
@@ -142,7 +139,6 @@ final readonly class Redis implements CacheInterface
                  */
                 $matchedKeys = preg_replace('|^' . preg_quote($this->prefix) . '|', '', $keys);
                 if (preg_last_error() !== PREG_NO_ERROR) {
-                    /** @phpstan-ignore-next-line */
                     throw new RuntimeException(preg_last_error_msg());
                 }
 
