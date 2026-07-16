@@ -10,12 +10,10 @@ use React\Promise\PromiseInterface;
 
 use function React\Promise\resolve;
 
-/** @phpstan-ignore-next-line */
 class ClientStub implements Client
 {
     use EventEmitterTrait;
 
-    /** @phpstan-ignore-next-line */
     public function __call($name, $args) //phpcs:disabled
     {
         return resolve(null);
@@ -80,7 +78,6 @@ class ClientStub implements Client
     }
 
     /**
-     * @phpstan-ignore-next-line
      */
     public function isBusy(): bool //phpcs:disabled
     {
