@@ -19,19 +19,20 @@ use function React\Promise\resolve;
 
 use const PREG_NO_ERROR;
 
+/** @api */
 final readonly class Redis implements CacheInterface
 {
     private const string DEFAULT_PREFIX = 'react:cache:';
     private const int DEFAULT_TTL       = 0;
 
-    /** @phpstan-ignore-next-line */
+    /** @phpstan-ignore ergebnis.noConstructorParameterWithDefaultValue,ergebnis.noConstructorParameterWithDefaultValue */
     public function __construct(private Client $client, private string $prefix = self::DEFAULT_PREFIX, private int $ttl = self::DEFAULT_TTL)
     {
     }
 
     /**
      * @inheritDoc
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore ergebnis.noParameterWithNullDefaultValue
      */
     public function get($key, $default = null): PromiseInterface
     {
@@ -40,49 +41,66 @@ final readonly class Redis implements CacheInterface
                 return resolve(null);
             }
 
-            /** @phpstan-ignore-next-line */
+            /** @phpstan-ignore method.notFound,return.type */
             return $this->client->get($this->prefix . $key);
         });
     }
 
     /**
      * @inheritDoc
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore ergebnis.noParameterWithNullDefaultValue
      */
     public function set($key, $value, $ttl = null): PromiseInterface
     {
         if ($this->ttl === 0 && $ttl === null) {
-            /** @phpstan-ignore-next-line */
-            return $this->client->set($this->prefix . $key, (string) $value)->then(
+            /**
+             * @var PromiseInterface<bool> $created
+             * @phpstan-ignore method.notFound,cast.string,method.nonObject
+             */
+            $created = $this->client->set($this->prefix . $key, (string) $value)->then(
                 static fn (): PromiseInterface => resolve(true),
                 static fn (): PromiseInterface => resolve(false),
             );
+
+            return $created;
         }
 
-        /** @phpstan-ignore-next-line */
-        return $this->client->psetex(
+        /**
+         * @var PromiseInterface<bool> $created
+         * @phpstan-ignore method.notFound
+         */
+        $created = $this->client->psetex(
             $this->prefix . $key,
             (string) ((float) ($this->ttl > 0 ? $this->ttl : $ttl) * 1000),
-            (string) $value, /** @phpstan-ignore-line */
-        )->then(/** @phpstan-ignore-line */
+            /** @phpstan-ignore cast.string */
+            (string) $value,
+            /** @phpstan-ignore method.nonObject */
+        )->then(
             static fn (): PromiseInterface => resolve(true),
             static fn (): PromiseInterface => resolve(false),
         );
+
+        return $created;
     }
 
     /** @inheritDoc */
     public function delete($key): PromiseInterface
     {
-        /** @phpstan-ignore-next-line */
-        return $this->client->del($this->prefix . $key)->then(
+        /**
+         * @var PromiseInterface<bool> $deleted
+         * @phpstan-ignore method.notFound,method.nonObject
+         */
+        $deleted = $this->client->del($this->prefix . $key)->then(
             static fn (): PromiseInterface => resolve(true),
             static fn (): PromiseInterface => resolve(false),
         );
+
+        return $deleted;
     }
 
     /**
      * @inheritDoc
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore typeCoverage.returnTypeCoverage,shipmonk.missingNativeReturnTypehint,missingType.iterableValue,ergebnis.noParameterWithNullDefaultValue
      */
     public function getMultiple(array $keys, $default = null)
     {
@@ -96,13 +114,13 @@ final readonly class Redis implements CacheInterface
 
     /**
      * @inheritDoc
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore typeCoverage.returnTypeCoverage,shipmonk.missingNativeReturnTypehint,ergebnis.noParameterWithNullDefaultValue,missingType.iterableValue
      */
     public function setMultiple(array $values, $ttl = null)
     {
         $promises = [];
         foreach ($values as $key => $value) {
-            $promises[$key] = $this->set((string) $key, $value, $ttl);
+            $promises[$key] = $this->set($key, $value, $ttl);
         }
 
         /** @param PromiseInterface<bool> $bools */
@@ -111,7 +129,7 @@ final readonly class Redis implements CacheInterface
 
     /**
      * @inheritDoc
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore typeCoverage.returnTypeCoverage,shipmonk.missingNativeReturnTypehint
      */
     public function deleteMultiple(array $keys)
     {
@@ -119,23 +137,33 @@ final readonly class Redis implements CacheInterface
             $keys[$index] = $this->prefix . $key;
         }
 
-        return $this->client->del(...$keys)->then( /** @phpstan-ignore-line */
+        /**
+         * @var PromiseInterface<bool> $deleted
+         * @phpstan-ignore method.notFound,method.nonObject
+         */
+        $deleted = $this->client->del(...$keys)->then(
             static fn (): PromiseInterface => resolve(true),
             static fn (): PromiseInterface => resolve(false),
         );
+
+        return $deleted;
     }
 
     /**
      * @inheritDoc
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore typeCoverage.returnTypeCoverage,shipmonk.missingNativeReturnTypehint
      */
     public function clear()
     {
-        return $this->client->keys($this->prefix . '*')->then( /** @phpstan-ignore-line */
+        /**
+         * @var PromiseInterface<bool> $cleared
+         * @phpstan-ignore method.notFound,method.nonObject
+         */
+        $cleared = $this->client->keys($this->prefix . '*')->then(
             function (array $keys): PromiseInterface {
                 /**
                  * @var array<string> $matchedKeys
-                 * @phpstan-ignore-next-line
+                 * @phpstan-ignore argument.type
                  */
                 $matchedKeys = preg_replace('|^' . preg_quote($this->prefix) . '|', '', $keys);
                 if (preg_last_error() !== PREG_NO_ERROR) {
@@ -145,15 +173,22 @@ final readonly class Redis implements CacheInterface
                 return $this->deleteMultiple($matchedKeys);
             },
         );
+
+        return $cleared;
     }
 
     /**
      * @inheritDoc
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore typeCoverage.returnTypeCoverage,shipmonk.missingNativeReturnTypehint
      */
     public function has($key)
     {
-        /** @phpstan-ignore-next-line */
-        return $this->client->exists($this->prefix . $key);
+        /**
+         * @var PromiseInterface<bool> $exists
+         * @phpstan-ignore method.notFound
+         */
+        $exists = $this->client->exists($this->prefix . $key);
+
+        return $exists;
     }
 }

@@ -4,3 +4,5 @@ parameters:
 		- ../../src
 		- ../../tests
 	level: max
+	excludePaths:
+		- '../../tests/ClientStub.php'
