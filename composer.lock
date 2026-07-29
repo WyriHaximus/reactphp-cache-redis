@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db8fd1beac4ba617a11d5234b4db8eb2",
+    "content-hash": "e808599b5d44de5429f92d119c9bfa75",
     "packages": [
         {
             "name": "clue/redis-protocol",
@@ -9787,16 +9787,16 @@
         },
         {
             "name": "wyrihaximus/makefiles",
-            "version": "0.13.2",
+            "version": "0.13.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WyriHaximus/Makefiles.git",
-                "reference": "d5fd4c780f685cf5a1290bcb32ac79abea4dfafb"
+                "reference": "258162a89005f0c0ff920d00e2e5cd851ebb74cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WyriHaximus/Makefiles/zipball/d5fd4c780f685cf5a1290bcb32ac79abea4dfafb",
-                "reference": "d5fd4c780f685cf5a1290bcb32ac79abea4dfafb",
+                "url": "https://api.github.com/repos/WyriHaximus/Makefiles/zipball/258162a89005f0c0ff920d00e2e5cd851ebb74cf",
+                "reference": "258162a89005f0c0ff920d00e2e5cd851ebb74cf",
                 "shasum": ""
             },
             "require": {
@@ -9837,7 +9837,7 @@
             "description": "🧱 Makefile building blocks",
             "support": {
                 "issues": "https://github.com/WyriHaximus/Makefiles/issues",
-                "source": "https://github.com/WyriHaximus/Makefiles/tree/0.13.2"
+                "source": "https://github.com/WyriHaximus/Makefiles/tree/0.13.3"
             },
             "funding": [
                 {
@@ -9845,7 +9845,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-07-20T06:36:04+00:00"
+            "time": "2026-07-29T18:27:30+00:00"
         },
         {
             "name": "wyrihaximus/phpstan-no-safe",
