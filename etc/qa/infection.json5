@@ -14,5 +14,6 @@
     },
     "mutators": {
         "@default": true
-    }
+    },
+    "threads": 64
 }
