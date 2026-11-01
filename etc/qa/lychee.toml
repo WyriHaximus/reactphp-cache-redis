@@ -1,3 +1,6 @@
+retry_wait_time = 3
+max_retries = 6
+timeout = 120
 verbose = "warn"
 no_progress = true
 exclude_path = ["^var/", "^vendor/", "^\\.git/"]
